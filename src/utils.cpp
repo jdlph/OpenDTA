@@ -794,6 +794,16 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
             // do nothing
         }
 
+        double toll = 0;
+        try
+        {
+            toll = std::stoi(line["toll"]);
+        }
+        catch(const std::exception& e)
+        {
+            // do nothing
+        }
+
         std::string modes {ALL_MODES};
         try
         {
@@ -816,7 +826,7 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
 
         auto link = new Link {
             link_id, link_no, head_node_no, tail_node_no,
-            lane_num, cap, ffs, len, modes, geo
+            lane_num, cap, ffs, len, toll, modes, geo
         };
 
         unsigned short dp_no = 0;

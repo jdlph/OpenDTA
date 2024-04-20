@@ -161,10 +161,10 @@ public:
     Link() = default;
 
     Link(std::string& id_, size_type no_, size_type head_node_no_, size_type tail_node_no_,
-         unsigned short lane_num_, double cap_, double ffs_, double len_,
+         unsigned short lane_num_, double cap_, double ffs_, double len_, double toll_,
          std::string& modes_, std::string& geo_)
          : id {std::move(id_)}, no {no_}, head_node_no {head_node_no_}, tail_node_no {tail_node_no_},
-           lane_num {lane_num_}, cap {cap_}, ffs {ffs_}, len {len_},
+           lane_num {lane_num_}, cap {cap_}, ffs {ffs_}, len {len_}, toll {toll_},
            allowed_modes {std::move(modes_)}, geo {std::move(geo_)}
     {
     }
