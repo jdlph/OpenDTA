@@ -745,6 +745,8 @@ public:
     ColumnPool(ColumnPool&&) = default;
     ColumnPool& operator=(ColumnPool&&) = delete;
 
+    ~ColumnPool() = default;
+
     ColumnVec& get_column_vec(const ColumnVecKey& k)
     {
         return cp[pos.at(k)];
@@ -1154,15 +1156,20 @@ public:
     SPNetwork(SPNetwork&&) = delete;
     SPNetwork& operator=(SPNetwork&&) = delete;
 
+    // exit code -1073740940 will be generated on Windows if simply using delete[]
+    // the following destructor can be replaced by ~SPNetwork() = default;
     ~SPNetwork()
     {
-        delete[] link_costs;
-        delete[] node_costs;
-        delete[] link_preds;
+        const auto m = get_link_num();
+        const auto n = get_node_num();
+
+        double_alloc.deallocate(link_costs, m);
+        double_alloc.deallocate(node_costs, n);
+        link_alloc.deallocate(link_preds, m);
 #ifdef MLC_DEQUE
-        delete[] next_nodes;
+        int_alloc.deallocate(next_nodes, n);
 #else
-        delete[] marked;
+        bool_alloc.deallocate(marked, n);
 #endif
     }
 
