@@ -684,7 +684,6 @@ public:
         return cols;
     }
 
-    // it might be useless according to Path4GMNS
     const auto& get_columns() const
     {
         return cols;

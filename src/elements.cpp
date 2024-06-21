@@ -485,16 +485,7 @@ void NetworkHandle::build_connectors()
     this->net.collect_centroids();
 }
 
-// useless
-void NetworkHandle::delete_spnetworks()
-{
-    for (auto spn : this->spns)
-        delete spn;
-
-    this->spns.clear();
-}
-
-// useless
+// useless?
 ColumnVec& NetworkHandle::get_column_vec(size_type i)
 {
     return this->cp.get_column_vec(i);

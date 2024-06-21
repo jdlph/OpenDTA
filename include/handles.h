@@ -165,7 +165,6 @@ private:
 
     void build_connectors();
     void setup_spnetworks();
-    void delete_spnetworks();
 
     void setup_agents();
     void setup_link_queues();

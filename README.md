@@ -1,6 +1,6 @@
-# TransOMS
+# OpenDTA
 
-TransOMS is a suite of **state-of-the-art** open-source applications for **Trans**portation **O**ptimization, **M**odeling, and **S**imulation, which brings the **cutting-edge** researches and the **enterprise-grade** implementations all together into one place.
+OpenDTA (previously known as TransOMS) is a suite of **state-of-the-art** open-source applications for **Trans**portation **O**ptimization, **M**odeling, and **S**imulation, which brings the **cutting-edge** researches and the **enterprise-grade** implementations all together into one place.
 
 One of its major components is a *modern*, *cross-platform*, and *lightning-fast* **dynamic traffic assignment (DTA)** system. It features a complete redesign of [DTALite](https://github.com/asu-trans-ai-lab/DTALite) using Modern C++ and enhancement to its core algorithms according to the deeply optimized [Path4GMNS](https://github.com/jdlph/Path4GMNS). Additional features are underway, including origin-destination demand estimation (ODME), fluid-queue-based analytical DTA, and more.
 

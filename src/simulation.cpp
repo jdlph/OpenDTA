@@ -13,7 +13,6 @@
 
 using namespace transoms;
 
-// useless
 inline const std::vector<size_type>& Agent::get_link_path() const
 {
     return col->get_links();
