@@ -40,8 +40,8 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     endif()
 endif()
 
-find_library(YAML_CPP ${YAML_CPP_LIB_NAME} PATHS lib)
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC ${YAML_CPP})
+find_library(YAML_CPP NAMES ${YAML_CPP_LIB_NAME} PATHS lib NO_SYSTEM_ENVIRONMENT_PATH)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${YAML_CPP})
 
 if (PARALLEL)
     find_package(OpenMP REQUIRED)
@@ -50,5 +50,5 @@ endif()
 
 # it is for std::experimental::filesystem in utils.cpp if g++ happens to be the compiler
 if (CMAKE_COMPILER_IS_GNUCXX)
-    target_link_libraries(${PROJECT_NAME} LINK_PUBLIC stdc++fs)
+    target_link_libraries(${PROJECT_NAME} PRIVATE stdc++fs)
 endif()
