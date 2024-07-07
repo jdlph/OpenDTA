@@ -106,7 +106,7 @@ void ColumnVec::update(Column&& c, unsigned short iter_no)
     else
     {
         c.increase_volume(v);
-        add_new_column(c);
+        add_new_column(std::move(c));
     }
 }
 
@@ -124,7 +124,7 @@ void ColumnVec::update(Column&& c)
     if (it != cols.end())
         const_cast<Column&>(*it).increase_volume(c.get_volume());
     else
-        add_new_column(c);
+        add_new_column(std::move(c));
 }
 
 void SPNetwork::generate_columns(unsigned short iter_no)

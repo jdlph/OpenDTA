@@ -171,7 +171,7 @@ public:
 
     // for connector only
     Link(std::string&& id_, size_type no_, size_type head_node_no_, size_type tail_node_no_)
-         : id {id_}, no {no_}, head_node_no {head_node_no_}, tail_node_no {tail_node_no_}
+         : id {std::move(id_)}, no {no_}, head_node_no {head_node_no_}, tail_node_no {tail_node_no_}
     {
     }
 
@@ -279,7 +279,7 @@ public:
 
     void add_vdfperiod(VDFPeriod&& vdf)
     {
-        vdfps.push_back(vdf);
+        vdfps.push_back(std::move(vdf));
     }
 
     void increase_period_vol(unsigned short i, double v)
@@ -591,7 +591,7 @@ public:
     // useless
     void set_geometry(std::string&& s)
     {
-        geo = s;
+        geo = std::move(s);
     }
 
     void set_gradient_cost(double c)
@@ -699,14 +699,9 @@ public:
         return vol;
     }
 
-    void add_new_column(Column& c)
-    {
-        cols.emplace(std::move(c));
-    }
-
     void add_new_column(Column&& c)
     {
-        cols.emplace(c);
+        cols.emplace(std::move(c));
     }
 
     void increase_volume(double v)

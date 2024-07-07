@@ -335,7 +335,7 @@ public:
                  Demand&& dem, std::unique_ptr<SpecialEvent>& se_)
         : no {no_}, period {std::move(period_)}, time_period {std::move(time_period_)}, se {std::move(se_)}
     {
-        ds.push_back(dem);
+        ds.push_back(std::move(dem));
         setup_time();
     }
 
