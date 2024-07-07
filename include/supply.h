@@ -86,7 +86,7 @@ public:
     VDFPeriod(const VDFPeriod&) = default;
     VDFPeriod& operator=(const VDFPeriod&) = delete;
 
-    VDFPeriod(VDFPeriod&&) = default;
+    VDFPeriod(VDFPeriod&&) noexcept = default;
     VDFPeriod& operator=(VDFPeriod&&) = delete;
 
     double get_travel_time() const
@@ -453,7 +453,7 @@ public:
     Column(const Column&) = default;
     Column& operator=(const Column&) = delete;
 
-    Column(Column&&) = default;
+    Column(Column&&) noexcept = default;
     Column& operator=(Column&&) = delete;
 
     ~Column() = default;
@@ -663,7 +663,7 @@ public:
     ColumnVec(const ColumnVec&) = delete;
     ColumnVec& operator=(const ColumnVec&) = delete;
 
-    ColumnVec(ColumnVec&&) = default;
+    ColumnVec(ColumnVec&&) noexcept = default;
     ColumnVec& operator=(ColumnVec&&) = delete;
 
     ~ColumnVec() = default;
@@ -736,7 +736,7 @@ public:
     ColumnPool(const ColumnPool&) = delete;
     ColumnPool& operator=(const ColumnPool) = delete;
 
-    ColumnPool(ColumnPool&&) = default;
+    ColumnPool(ColumnPool&&) noexcept = default;
     ColumnPool& operator=(ColumnPool&&) = delete;
 
     ~ColumnPool() = default;
@@ -817,7 +817,7 @@ public:
     Zone(const Zone&) = delete;
     Zone& operator=(const Zone&) = delete;
 
-    Zone(Zone&&) = default;
+    Zone(Zone&&) noexcept = default;
     Zone& operator=(Zone&&) = delete;
 
     ~Zone() = default;
@@ -1323,7 +1323,7 @@ public:
     LinkQueue(const LinkQueue&) = delete;
     LinkQueue& operator=(const LinkQueue&) = delete;
 
-    LinkQueue(LinkQueue&&) = default;
+    LinkQueue(LinkQueue&&) noexcept = default;
     LinkQueue& operator=(LinkQueue&&) = delete;
 
     ~LinkQueue() = default;

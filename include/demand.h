@@ -32,7 +32,7 @@ public:
     Agent(const Agent&) = delete;
     Agent& operator=(const Agent&) = delete;
 
-    Agent(Agent&&) = default;
+    Agent(Agent&&) noexcept = default;
     Agent& operator=(Agent&&) = delete;
 
     ~Agent() = default;
@@ -287,7 +287,7 @@ public:
     Demand(const Demand&) = default;
     Demand& operator=(const Demand&) = delete;
 
-    Demand(Demand&&) = default;
+    Demand(Demand&&) noexcept = default;
     Demand& operator=(Demand&&) = delete;
 
     ~Demand() = default;

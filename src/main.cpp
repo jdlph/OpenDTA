@@ -48,7 +48,7 @@ int main()
     std::cout << "TransOMS completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
     ts = high_resolution_clock::now();
 
-    nh.output_columns();
+    // nh.output_columns();
     // nh.output_link_performance_ue();
     // nh.output_trajectories();
 
