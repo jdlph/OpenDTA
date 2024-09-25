@@ -807,9 +807,7 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
         std::string modes;
         try
         {
-            modes = line["allowed_uses"];
-            if (modes.empty())
-                modes = ALL_MODES;
+            line["allowed_uses"].empty() ? modes = ALL_MODES : modes = line["allowed_uses"];
         }
         catch(const std::exception& e)
         {

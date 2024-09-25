@@ -30,7 +30,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     endif()
 
     if (PARALLEL)
-        set(CMAKE_CXX_FLAGS "-Xpreprocessor -fopenmp-version=45 -fpic")
+        set(CMAKE_CXX_FLAGS "-Xpreprocessor -fopenmp -fpic")
     endif()
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(YAML_CPP_LIB_NAME yaml-cpp_linux)

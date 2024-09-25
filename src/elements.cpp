@@ -407,6 +407,7 @@ void NetworkHandle::setup_spnetworks()
     size_type i = 0;
     for (auto& [k, z] : this->net.get_zones())
     {
+        bool is_orig_zone = this->cp.has_valid_demand(z);
         for (auto& dp : dps)
         {
             for (auto& d : dp->get_demands())
@@ -418,9 +419,9 @@ void NetworkHandle::setup_spnetworks()
                     unsigned short no = spns.size();
                     spn_map[{dp->get_no(), at_no, i}] = no;
                     auto sp = new SPNetwork{no, this->net, this->cp, dp, at};
-                    if (this->cp.has_valid_demand(z))
+                    if (is_orig_zone)
                         sp->add_orig_nodes(z);
-                    
+
                     spns.push_back(sp);
                 }
                 else
@@ -428,7 +429,7 @@ void NetworkHandle::setup_spnetworks()
                     unsigned short m = i % thread_nums;
                     auto sp_no = spn_map[{dp->get_no(), at_no, m}];
                     auto sp = this->spns[sp_no];
-                    if (this->cp.has_valid_demand(z))
+                    if (is_orig_zone)
                         sp->add_orig_nodes(z);
                 }
             }
@@ -492,9 +493,4 @@ void NetworkHandle::build_connectors()
 ColumnVec& NetworkHandle::get_column_vec(size_type i)
 {
     return this->cp.get_column_vec(i);
-}
-
-bool ColumnPool::has_valid_demand(const Zone* z) const
-{
-    return orig_zones.find(z->get_no()) != orig_zones.end();
 }

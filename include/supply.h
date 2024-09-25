@@ -424,6 +424,147 @@ private:
     std::vector<const Link*> outgoing_links;
 };
 
+class Zone {
+public:
+    using Vertex = std::pair<double, double>;
+    using Boundary = std::tuple<double, double, double, double>;
+
+    Zone() = default;
+
+    explicit Zone(size_type no_) : no {no_}
+    {
+    }
+
+    Zone(size_type no_, const std::string& id_, unsigned short bin_id_)
+        : no {no_}, id {id_}, bin_id {bin_id_}
+    {
+    }
+
+    Zone(const Zone&) = delete;
+    Zone& operator=(const Zone&) = delete;
+
+    Zone(Zone&&) noexcept = default;
+    Zone& operator=(Zone&&) = delete;
+
+    ~Zone() = default;
+
+    const std::vector<size_type>& get_activity_nodes() const
+    {
+        return act_nodes;
+    }
+
+    size_type get_activity_nodes_num() const
+    {
+        return act_nodes.size();
+    }
+
+    unsigned short get_bin_index() const
+    {
+        return bin_id;
+    }
+
+    const Boundary& get_boundaries() const
+    {
+        return bd;
+    }
+
+    const Node* get_centroid() const
+    {
+        return centroid;
+    }
+
+    const Vertex get_coordinate() const
+    {
+        return std::make_pair(x, y);
+    }
+
+    std::string get_geometry() const
+    {
+        try
+        {
+            auto U = std::to_string(std::get<0>(bd));
+            auto D = std::to_string(std::get<1>(bd));
+            auto L = std::to_string(std::get<2>(bd));
+            auto R = std::to_string(std::get<3>(bd));
+
+            return "LINESTRING (" + L + U + ',' + R + U + ',' + R + D + ',' + L + D + ',' + L + U + ')';
+        }
+        catch(const std::exception& e)
+        {
+            return "LINESTRING ()";
+        }
+    }
+
+    const auto& get_id() const
+    {
+        return id;
+    }
+
+    size_type get_no() const
+    {
+        return no;
+    }
+
+    const std::vector<size_type>& get_nodes() const
+    {
+        return nodes;
+    }
+
+    double get_production() const
+    {
+        return prod;
+    }
+
+    void add_activity_node(size_type node_no)
+    {
+        act_nodes.push_back(node_no);
+    }
+
+    void add_node(size_type node_no)
+    {
+        nodes.push_back(node_no);
+    }
+
+    void set_bin_index(unsigned short bi)
+    {
+        bin_id = bi;
+    }
+
+    void set_centroid(const Node* p)
+    {
+        centroid = p;
+    }
+
+    void set_geometry(double x_, double y_, const Boundary& bd_)
+    {
+        x = x_;
+        y = y_;
+        bd = bd_;
+    }
+
+    void set_production(double p)
+    {
+        prod = p;
+    }
+
+private:
+    std::string id;
+    size_type no = 0;
+
+    std::vector<size_type> act_nodes;
+    std::vector<size_type> nodes;
+    const Node* centroid;
+
+    // the following members are related to zone synthesis
+    unsigned short bin_id = 0;
+
+    Boundary bd;
+    double x = 91;
+    double y = 181;
+
+    double prod = 0;
+};
+
 class Column {
     friend bool operator==(const Column& c1, const Column& c2)
     {
@@ -651,8 +792,6 @@ struct ColumnHash {
     }
 };
 
-class Zone;
-
 class ColumnVec {
 public:
     ColumnVec() : vol {0}, route_fixed {false}
@@ -774,7 +913,10 @@ public:
         return pos.find(k) != pos.end();
     }
 
-    bool has_valid_demand(const Zone* z) const;
+    bool has_valid_demand(const Zone* z) const
+    {
+        return orig_zones.find(z->get_no()) != orig_zones.end();
+    }
 
     void update(const ColumnVecKey& cvk, double vol)
     {
@@ -804,147 +946,6 @@ private:
     std::vector<ColumnVec> cp;
     // origin zones with valid demand to other zones
     std::set<size_type> orig_zones;
-};
-
-class Zone {
-public:
-    using Vertex = std::pair<double, double>;
-    using Boundary = std::tuple<double, double, double, double>;
-
-    Zone() = default;
-
-    explicit Zone(size_type no_) : no {no_}
-    {
-    }
-
-    Zone(size_type no_, const std::string& id_, unsigned short bin_id_)
-        : no {no_}, id {id_}, bin_id {bin_id_}
-    {
-    }
-
-    Zone(const Zone&) = delete;
-    Zone& operator=(const Zone&) = delete;
-
-    Zone(Zone&&) noexcept = default;
-    Zone& operator=(Zone&&) = delete;
-
-    ~Zone() = default;
-
-    const std::vector<size_type>& get_activity_nodes() const
-    {
-        return act_nodes;
-    }
-
-    size_type get_activity_nodes_num() const
-    {
-        return act_nodes.size();
-    }
-
-    unsigned short get_bin_index() const
-    {
-        return bin_id;
-    }
-
-    const Boundary& get_boundaries() const
-    {
-        return bd;
-    }
-
-    const Node* get_centroid() const
-    {
-        return centroid;
-    }
-
-    const Vertex get_coordinate() const
-    {
-        return std::make_pair(x, y);
-    }
-
-    std::string get_geometry() const
-    {
-        try
-        {
-            auto U = std::to_string(std::get<0>(bd));
-            auto D = std::to_string(std::get<1>(bd));
-            auto L = std::to_string(std::get<2>(bd));
-            auto R = std::to_string(std::get<3>(bd));
-
-            return "LINESTRING (" + L + U + ',' + R + U + ',' + R + D + ',' + L + D + ',' + L + U + ')';
-        }
-        catch(const std::exception& e)
-        {
-            return "INESTRING ()";
-        }
-    }
-
-    const auto& get_id() const
-    {
-        return id;
-    }
-
-    size_type get_no() const
-    {
-        return no;
-    }
-
-    const std::vector<size_type>& get_nodes() const
-    {
-        return nodes;
-    }
-
-    double get_production() const
-    {
-        return prod;
-    }
-
-    void add_activity_node(size_type node_no)
-    {
-        act_nodes.push_back(node_no);
-    }
-
-    void add_node(size_type node_no)
-    {
-        nodes.push_back(node_no);
-    }
-
-    void set_bin_index(unsigned short bi)
-    {
-        bin_id = bi;
-    }
-
-    void set_centroid(const Node* p)
-    {
-        centroid = p;
-    }
-
-    void set_geometry(double x_, double y_, const Boundary& bd_)
-    {
-        x = x_;
-        y = y_;
-        bd = bd_;
-    }
-
-    void set_production(double p)
-    {
-        prod = p;
-    }
-
-private:
-    std::string id;
-    size_type no = 0;
-
-    std::vector<size_type> act_nodes;
-    std::vector<size_type> nodes;
-    const Node* centroid;
-
-    // the following members are related to zone synthesis
-    unsigned short bin_id = 0;
-
-    Boundary bd;
-    double x = 91;
-    double y = 181;
-
-    double prod = 0;
 };
 
 // an abstract class
