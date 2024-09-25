@@ -804,14 +804,16 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
             // do nothing
         }
 
-        std::string modes {ALL_MODES};
+        std::string modes;
         try
         {
             modes = line["allowed_uses"];
+            if (modes.empty())
+                modes = ALL_MODES;
         }
         catch(const std::exception& e)
         {
-            // do nothing
+            modes = ALL_MODES;
         }
 
         std::string geo;

@@ -19,6 +19,7 @@
 #include <memory>
 #include <queue>
 #include <random>
+#include <set>
 #include <unordered_set>
 #include <vector>
 
@@ -650,6 +651,8 @@ struct ColumnHash {
     }
 };
 
+class Zone;
+
 class ColumnVec {
 public:
     ColumnVec() : vol {0}, route_fixed {false}
@@ -771,6 +774,8 @@ public:
         return pos.find(k) != pos.end();
     }
 
+    bool has_valid_demand(const Zone* z) const;
+
     void update(const ColumnVecKey& cvk, double vol)
     {
         if (!contains_key(cvk))
@@ -788,6 +793,7 @@ public:
         {
             pos.emplace(cvk, pos.size());
             cp.push_back(ColumnVec(cvk));
+            orig_zones.insert(std::get<0>(cvk));
         }
 
         cp[pos[cvk]].increase_volume(vol);
@@ -796,6 +802,8 @@ public:
 private:
     std::map<ColumnVecKey, size_type> pos;
     std::vector<ColumnVec> cp;
+    // origin zones with valid demand to other zones
+    std::set<size_type> orig_zones;
 };
 
 class Zone {

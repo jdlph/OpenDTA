@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(TransOMS VERSION 0.1.0)
 
 include(CTest)
@@ -8,7 +8,7 @@ option(PARALLEL ON)
 configure_file(config.h.in config.h)
 
 set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release)
 
 add_executable(${PROJECT_NAME} src/main.cpp src/elements.cpp src/simulation.cpp src/ue.cpp src/utils.cpp)
 
@@ -30,7 +30,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     endif()
 
     if (PARALLEL)
-        set(CMAKE_CXX_FLAGS "-Xpreprocessor -fopenmp-version=50 -fpic")
+        set(CMAKE_CXX_FLAGS "-Xpreprocessor -fopenmp-version=45 -fpic")
     endif()
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(YAML_CPP_LIB_NAME yaml-cpp_linux)

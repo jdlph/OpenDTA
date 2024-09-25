@@ -20,9 +20,10 @@ int main()
     auto ts = high_resolution_clock::now();
 
     // const std::string dir {"../data/Chicago_Regional/"};
-    const std::string dir {"../data/Chicago_Sketch/"};
+    // const std::string dir {"../data/Chicago_Sketch/"};
     // const std::string dir {"../data/Two_Corridor/"};
     // const std::string dir {"../data/Sioux_Falls/"};
+    const std::string dir {"./"};
 
     NetworkHandle nh;
     nh.read_settings(dir);
@@ -48,8 +49,8 @@ int main()
     std::cout << "TransOMS completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
     ts = high_resolution_clock::now();
 
-    // nh.output_columns();
-    // nh.output_link_performance_ue();
+    nh.output_columns();
+    nh.output_link_performance_ue();
     // nh.output_trajectories();
 
     te = high_resolution_clock::now();
