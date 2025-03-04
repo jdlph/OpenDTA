@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of Path-based Static User Equilibrium (UE)
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #include <config.h>
@@ -54,6 +54,9 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     update_link_and_column_volume(1, false);
     update_link_travel_time();
     update_column_attributes();
+
+    ts = high_resolution_clock::now();
+    std::cout << "TransOMS completes column updating and postprocessing in " << duration_cast<milliseconds>(ts - te).count() << " milliseconds\n";
 }
 
 void NetworkHandle::update_column_gradient_and_flow(unsigned short iter_no)
@@ -152,27 +155,58 @@ void NetworkHandle::update_column_attributes()
 
         // oz_no, dz_no, dp_no, at_no
         const auto dp_no = std::get<2>(cv.get_key());
+        const auto at_no = std::get<3>(cv.get_key());
+        const auto vot = ats[at_no]->get_vot();
+
+        size_type k = 0;
+        double least_gradient_cost = std::numeric_limits<double>::max();
+
+        const Column* p = nullptr;
         // col is const
         for (auto& col : cv.get_columns())
         {
-            // avoid data racing
-            #pragma omp atomic
-            total_gap += col.get_gap();
-            #pragma omp atomic
-            total_sys_travel_time += col.get_sys_travel_time();
+            if (!col.get_volume())
+            {
+                delete &col;
+                continue;
+            }
+                
+            const_cast<Column&>(col).set_no(k++);
 
             double tt = 0;
             double pt = 0;
-
+            double gc = 0;
+            
             for (auto j : col.get_links())
             {
                 const auto link = this->get_link(j);
                 tt += link->get_period_travel_time(dp_no);
                 pt += link->get_toll();
+                gc += link->get_generalized_cost(dp_no, vot);
             }
 
             const_cast<Column&>(col).set_travel_time(tt);
             const_cast<Column&>(col).set_toll(pt);
+            const_cast<Column&>(col).set_gradient_cost(gc);
+
+            if (gc < least_gradient_cost)
+            {
+                least_gradient_cost = gc;
+                p = &col;
+            }       
+        }
+
+        for (auto& col : cv.get_columns())
+        {
+            if (!col.get_volume())
+                continue;
+
+            const_cast<Column&>(col).update_gradient_cost_diffs(least_gradient_cost);
+            // avoid data racing
+            #pragma omp atomic
+            total_gap += col.get_gap();
+            #pragma omp atomic
+            total_sys_travel_time += col.get_sys_travel_time();
         }
     }
 

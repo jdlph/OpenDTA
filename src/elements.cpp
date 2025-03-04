@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of member functions from demand and supply classes
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #include <config.h>
@@ -229,9 +229,6 @@ void SPNetwork::update_link_costs()
 void SPNetwork::backtrace_shortest_path_tree(size_type src_node_no, unsigned short iter_no)
 {
     const auto p = get_nodes()[src_node_no];
-    if (p->get_outgoing_links().empty())
-        return;
-
     const auto oz_no = p->get_zone_no();
 
     for (const auto c : get_centroids())
@@ -407,6 +404,9 @@ void NetworkHandle::setup_spnetworks()
     size_type i = 0;
     for (auto& [k, z] : this->net.get_zones())
     {
+        if (!z->is_connected())
+            continue;
+
         bool is_orig_zone = this->cp.has_valid_demand(z);
         for (auto& dp : dps)
         {

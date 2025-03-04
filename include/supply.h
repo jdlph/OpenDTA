@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Definitions of classes related to supply
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #ifndef GUARD_SUPPLY_H
@@ -515,6 +515,11 @@ public:
         return prod;
     }
 
+    bool is_connected() const
+    {
+        return !centroid->get_outgoing_links().empty();
+    }
+
     void add_activity_node(size_type node_no)
     {
         act_nodes.push_back(node_no);
@@ -741,6 +746,11 @@ public:
         gc = c;
     }
 
+    void set_no(size_type no_)
+    {
+        no = no_;
+    }
+
     void set_od_vol(double v)
     {
         od_vol = v;
@@ -924,6 +934,7 @@ public:
         {
             pos[cvk] = pos.size();
             cp.push_back(ColumnVec(cvk));
+            orig_zones.insert(std::get<0>(cvk));
         }
 
         cp[pos[cvk]].increase_volume(vol);
