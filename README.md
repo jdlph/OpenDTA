@@ -96,7 +96,7 @@ TransOMS is built on [C++17](https://en.cppreference.com/w/cpp/17) with [yaml-cp
 > [!IMPORTANT]
 > OpenMP requires an additional runtime library. Its detailed installation instruction is summarized [here](https://path4gmns.readthedocs.io/en/latest/usecases.html#target-to-paragraph).
 
-The build process is defined in [CMakeLists.txt](CMakeLists.txt) along with the above dependency specifications. You will need [CMake](https://cmake.org/download/) (3.1.0 or higher) to build the executable by running the following commands.
+The build process is defined in [CMakeLists.txt](CMakeLists.txt) along with the above dependency specifications. You will need [CMake](https://cmake.org/download/) (3.15.0 or higher) to build the executable by running the following commands.
 
 ```bash
 # from the root directory of TransOMS

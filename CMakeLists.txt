@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.15.0)
 project(TransOMS VERSION 0.1.0)
 
 include(CTest)
@@ -9,6 +9,8 @@ configure_file(config.h.in config.h)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
+
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 add_executable(${PROJECT_NAME} src/main.cpp src/elements.cpp src/simulation.cpp src/ue.cpp src/utils.cpp)
 
@@ -28,24 +30,18 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     elseif(CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "x86_64")
         set(YAML_CPP_LIB_NAME yaml-cpp_mac-x86)
     endif()
-
-    if (PARALLEL)
-        set(CMAKE_CXX_FLAGS "-Xpreprocessor -fopenmp -fpic")
-    endif()
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(YAML_CPP_LIB_NAME yaml-cpp_linux)
-
-    if (PARALLEL)
-        set(CMAKE_CXX_FLAGS "-fopenmp -fpic")
-    endif()
 endif()
 
 find_library(YAML_CPP NAMES ${YAML_CPP_LIB_NAME} PATHS lib NO_SYSTEM_ENVIRONMENT_PATH)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${YAML_CPP})
 
 if (PARALLEL)
+    message(STATUS "Build parallel version")
     find_package(OpenMP REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 # it is for std::experimental::filesystem in utils.cpp if g++ happens to be the compiler

@@ -166,17 +166,14 @@ void NetworkHandle::update_column_attributes()
         for (auto& col : cv.get_columns())
         {
             if (!col.get_volume())
-            {
-                delete &col;
                 continue;
-            }
-                
+
             const_cast<Column&>(col).set_no(k++);
 
             double tt = 0;
             double pt = 0;
             double gc = 0;
-            
+
             for (auto j : col.get_links())
             {
                 const auto link = this->get_link(j);
@@ -193,7 +190,7 @@ void NetworkHandle::update_column_attributes()
             {
                 least_gradient_cost = gc;
                 p = &col;
-            }       
+            }
         }
 
         for (auto& col : cv.get_columns())
