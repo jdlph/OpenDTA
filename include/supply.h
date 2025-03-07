@@ -79,7 +79,7 @@ class VDFPeriod {
 public:
     VDFPeriod() = delete;
 
-    VDFPeriod(unsigned short no_, double alpha_, double beta_, double cap_ , double fftt_)
+    VDFPeriod(uint8_t no_, double alpha_, double beta_, double cap_ , double fftt_)
         : no {no_}, alpha {alpha_}, beta {beta_}, cap {cap_}, fftt {fftt_}
     {
     }
@@ -139,7 +139,7 @@ public:
     }
 
 private:
-    unsigned short no = 0;
+    uint8_t no = 0;
 
     double alpha = 0.15;
     double beta = 4;
@@ -162,7 +162,7 @@ public:
     Link() = default;
 
     Link(std::string& id_, size_type no_, size_type head_node_no_, size_type tail_node_no_,
-         unsigned short lane_num_, double cap_, double ffs_, double len_, double toll_,
+         uint8_t lane_num_, double cap_, double ffs_, double len_, double toll_,
          std::string& modes_, std::string& geo_)
          : id {std::move(id_)}, no {no_}, head_node_no {head_node_no_}, tail_node_no {tail_node_no_},
            lane_num {lane_num_}, cap {cap_}, ffs {ffs_}, len {len_}, toll {toll_},
@@ -237,7 +237,7 @@ public:
         return geo;
     }
 
-    unsigned short get_lane_num() const
+    uint8_t get_lane_num() const
     {
         return lane_num;
     }
@@ -312,7 +312,7 @@ private:
     size_type head_node_no;
     size_type tail_node_no;
 
-    unsigned short lane_num = 1;
+    uint8_t lane_num = 1;
 
     double cap = 1999;
     double ffs = 60;

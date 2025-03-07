@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Alias, constants, and forward declarations of some classes.
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 -2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #ifndef GUARD_GLOBAL_H
@@ -11,6 +11,7 @@
 
 #define MLC_DEQUE
 
+#include <cstdint>
 #include <random>
 #include <string>
 #include <tuple>
@@ -19,7 +20,7 @@ namespace transoms
 {
 using size_type = unsigned int;
 // origin zone no, destination zone no, demand period no, agent type no
-using ColumnVecKey = std::tuple<unsigned short, unsigned short, unsigned short, unsigned short>;
+using ColumnVecKey = std::tuple<unsigned short, unsigned short, uint8_t, uint8_t>;
 
 // some constants
 constexpr unsigned short CHUNK = 256;

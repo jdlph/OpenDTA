@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Definitions of classes related to demand
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 -2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #ifndef GUARD_DEMAND_H
@@ -21,7 +21,7 @@ class Agent {
 public:
     Agent() = delete;
 
-    Agent(size_type no_, unsigned short at_no_, unsigned short dp_no_,
+    Agent(size_type no_, uint8_t at_no_, uint8_t dp_no_,
           unsigned short oz_no_, unsigned short dz_no_, const Column* c = nullptr)
         : no {no_}, at_no {at_no_}, dp_no {dp_no_}, oz_no {oz_no_}, dz_no {dz_no_},
           col {c}, pce {1}
@@ -172,8 +172,8 @@ private:
 private:
     size_type no;
 
-    unsigned short at_no;
-    unsigned short dp_no;
+    uint8_t at_no;
+    uint8_t dp_no;
 
     unsigned short oz_no;
     unsigned short dz_no;
@@ -197,7 +197,7 @@ public:
     {
     }
 
-    AgentType(unsigned short no_, std::string& name_, unsigned short flow_type_,
+    AgentType(uint8_t no_, std::string& name_, uint8_t flow_type_,
               double pce_, double vot_,  double ffs_, bool use_link_ffs_)
         : no {no_}, name {std::move(name_)}, flow_type {flow_type_}, pce {pce_},
           vot {vot_}, ffs {ffs_}, is_link_ffs {use_link_ffs_}
@@ -259,10 +259,10 @@ public:
     }
 
 private:
-    unsigned short no;
+    uint8_t no;
     std::string name;
 
-    unsigned short flow_type;
+    uint8_t flow_type;
     double pce;
     double vot;
 
@@ -278,7 +278,7 @@ public:
     {
     }
 
-    Demand(unsigned short no_, std::string& filename_, const AgentType* at_)
+    Demand(uint8_t no_, std::string& filename_, const AgentType* at_)
         : no {no_}, filename {std::move(filename_)}, at {at_}
     {
     }
@@ -312,7 +312,7 @@ public:
     }
 
 private:
-    unsigned short no = 0;
+    uint8_t no = 0;
     std::string filename = "demand.csv";
 
     const AgentType* at;
@@ -329,7 +329,7 @@ public:
         ds.push_back(dem);
     }
 
-    DemandPeriod(unsigned short no_,
+    DemandPeriod(uint8_t no_,
                  std::string& period_, std::string& time_period_,
                  Demand&& dem, std::unique_ptr<SpecialEvent>& se_)
         : no {no_}, period {std::move(period_)}, time_period {std::move(time_period_)}, se {std::move(se_)}
@@ -395,7 +395,7 @@ private:
     unsigned short to_minutes(const std::string& t);
 
 private:
-    unsigned short no;
+    uint8_t no;
 
     std::string period;
     std::string time_period;

@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of utilities
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #ifdef _WIN32
@@ -754,7 +754,7 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
             continue;
         }
 
-        unsigned short lane_num = 1;
+        uint8_t lane_num = 1;
         try
         {
             lane_num = std::stoi(line["lanes"]);
@@ -829,7 +829,7 @@ void NetworkHandle::read_links(const std::string& dir, const std::string& filena
             lane_num, cap, ffs, len, toll, modes, geo
         };
 
-        unsigned short dp_no = 0;
+        uint8_t dp_no = 0;
         for (const auto& hp : vec)
         {
             double vdf_alpha = 0.15;
@@ -892,7 +892,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 {
     YAML::Node settings = YAML::LoadFile(file_path);
 
-    unsigned short i = 0;
+    uint8_t i = 0;
     const auto& agents = settings["agent_type"];
     for (const auto& a : agents)
     {
@@ -906,7 +906,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
                 continue;
             }
 
-            auto flow_type = a["flow_type"].as<unsigned short>();
+            auto flow_type = a["flow_type"].as<uint8_t>();
             auto pce = a["pce"].as<double>();
             auto vot = a["vot"].as<double>();
             auto ffs = a["free_speed"].as<double>();
@@ -925,11 +925,11 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
     if (this->ats.empty())
         this->ats.push_back(new AgentType());
 
-    unsigned short j = 0;
+    uint8_t j = 0;
     const auto& demand_periods = settings["demand_period"];
     for (const auto& dp : demand_periods)
     {
-        unsigned short k = 0;
+        uint8_t k = 0;
         auto period = dp["period"].as<std::string>();
         auto time_period = dp["time_period"].as<std::string>();
 
