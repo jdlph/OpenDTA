@@ -233,8 +233,8 @@ void NetworkHandle::load_columns(const std::string& dir, const std::string& file
             std::terminate();
         }
 
-        size_type oz_no;
-        size_type dz_no;
+        unsigned short oz_no;
+        unsigned short dz_no;
         try
         {
             oz_no = this->net.get_zone_no(oz_id);
@@ -490,8 +490,8 @@ void NetworkHandle::read_demand(const std::string& dir, unsigned short dp_no, un
             continue;
         }
 
-        size_type oz_no;
-        size_type dz_no;
+        unsigned short oz_no;
+        unsigned short dz_no;
         try
         {
             oz_no = this->net.get_zone_no(oz_id);
@@ -615,7 +615,7 @@ void NetworkHandle::read_nodes(const std::string& dir, const std::string& filena
         {
             if (!this->has_zone_id(zone_id))
             {
-                size_type no = this->get_zone_num();
+                unsigned short no = this->get_zone_num();
                 this->net.add_zone(new Zone{no, zone_id, bin_index});
             }
 

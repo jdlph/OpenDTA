@@ -100,17 +100,17 @@ private:
         return get_node(link->get_tail_node_no())->get_id();
     }
 
-    const std::string& get_zone_id(size_type zone_no) const
+    const std::string& get_zone_id(unsigned short zone_no) const
     {
         return net.get_zone_id(zone_no);
     }
 
-    size_type get_zone_num() const
+    unsigned short get_zone_num() const
     {
         return net.get_zones().size();
     }
 
-    const auto get_agent_type(const std::string& at_name) const
+    const AgentType* get_agent_type(const std::string& at_name) const
     {
         for (const auto at : ats)
         {
@@ -122,7 +122,7 @@ private:
         throw std::exception{};
     }
 
-    const auto get_demand_period(const std::string& dp_str) const
+    const DemandPeriod* get_demand_period(const std::string& dp_str) const
     {
         for (const auto dp : dps)
         {

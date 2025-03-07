@@ -22,7 +22,7 @@ public:
     Agent() = delete;
 
     Agent(size_type no_, unsigned short at_no_, unsigned short dp_no_,
-          size_type oz_no_, size_type dz_no_, const Column* c = nullptr)
+          unsigned short oz_no_, unsigned short dz_no_, const Column* c = nullptr)
         : no {no_}, at_no {at_no_}, dp_no {dp_no_}, oz_no {oz_no_}, dz_no {dz_no_},
           col {c}, pce {1}
     {
@@ -175,9 +175,8 @@ private:
     unsigned short at_no;
     unsigned short dp_no;
 
-    // use unsigned short instead?
-    size_type oz_no;
-    size_type dz_no;
+    unsigned short oz_no;
+    unsigned short dz_no;
 
     const Column* col;
 

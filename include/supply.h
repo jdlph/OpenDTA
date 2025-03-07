@@ -336,7 +336,7 @@ public:
     }
 
     // constructor for centroids to be used in NetworkHandle::build_connectors()
-    Node(size_type no_, std::string&& id_, double x_, double y_, size_type z_no_, bool act_node_ = false)
+    Node(size_type no_, std::string&& id_, double x_, double y_, unsigned short z_no_, bool act_node_ = false)
         : no {no_}, id {id_}, x {x_}, y {y_}, zone_no {z_no_}, act_node {act_node_}
     {
     }
@@ -359,7 +359,7 @@ public:
         return no;
     }
 
-    auto get_zone_no() const
+    unsigned short get_zone_no() const
     {
         return zone_no;
     }
@@ -417,7 +417,7 @@ private:
     double x = COORD_X;
     double y = COORD_Y;
 
-    size_type zone_no;
+    unsigned short zone_no;
     bool act_node;
 
     std::vector<const Link*> incoming_links;
@@ -431,11 +431,11 @@ public:
 
     Zone() = default;
 
-    explicit Zone(size_type no_) : no {no_}
+    explicit Zone(unsigned short no_) : no {no_}
     {
     }
 
-    Zone(size_type no_, const std::string& id_, unsigned short bin_id_)
+    Zone(unsigned short no_, const std::string& id_, unsigned short bin_id_)
         : no {no_}, id {id_}, bin_id {bin_id_}
     {
     }
@@ -500,7 +500,7 @@ public:
         return id;
     }
 
-    size_type get_no() const
+    unsigned short get_no() const
     {
         return no;
     }
@@ -554,7 +554,7 @@ public:
 
 private:
     std::string id;
-    size_type no = 0;
+    unsigned short no = 0;
 
     std::vector<size_type> act_nodes;
     std::vector<size_type> nodes;
@@ -1035,7 +1035,7 @@ public:
     }
 
     // to do: use [] to boost the performance as zone_id is guaranteed to be valid
-    size_type get_zone_no(const std::string& zone_id) const
+    unsigned short get_zone_no(const std::string& zone_id) const
     {
         return zones.at(zone_id)->get_no();
     }
@@ -1095,7 +1095,7 @@ public:
         return zones[zone_id];
     }
 
-    const std::string& get_zone_id(size_type zone_no) const
+    const std::string& get_zone_id(unsigned short zone_no) const
     {
         return zone_ids[zone_no];
     }
@@ -1347,7 +1347,6 @@ public:
     LinkQueue& operator=(LinkQueue&&) = delete;
 
     ~LinkQueue() = default;
-
 
     void append_entr_queue(size_type a)
     {
