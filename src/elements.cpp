@@ -396,12 +396,12 @@ void SPNetwork::single_source_shortest_path_dijkstra(size_type src_node_no)
 
 void NetworkHandle::setup_spnetworks()
 {
-    using SPNKey = std::tuple<unsigned short, unsigned short, unsigned short>;
-    std::map<SPNKey, size_type> spn_map;
+    using SPNKey = std::tuple<uint8_t, uint8_t, unsigned short>;
+    std::map<SPNKey, unsigned short> spn_map;
 
     build_connectors();
 
-    size_type i = 0;
+    unsigned short i = 0;
     for (auto& [k, z] : this->net.get_zones())
     {
         if (!z->is_connected())

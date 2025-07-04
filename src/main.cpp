@@ -43,7 +43,7 @@ int main()
     std::cout << "TransOMS finds UE in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
     ts = high_resolution_clock::now();
 
-    // nh.run_simulation();
+    nh.run_simulation();
 
     te = high_resolution_clock::now();
     std::cout << "TransOMS completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";

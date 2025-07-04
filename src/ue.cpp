@@ -38,7 +38,8 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     }
 
     auto te = high_resolution_clock::now();
-    std::cout << "TransOMS completes column generation in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
+    std::cout << "TransOMS completes column generation in "
+              << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
 
     for (auto i = 0; i != column_opt_num;)
     {
@@ -56,7 +57,8 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     update_column_attributes();
 
     ts = high_resolution_clock::now();
-    std::cout << "TransOMS completes column updating and postprocessing in " << duration_cast<milliseconds>(ts - te).count() << " milliseconds\n";
+    std::cout << "TransOMS completes column updating and postprocessing in "
+              << duration_cast<milliseconds>(ts - te).count() << " milliseconds\n";
 }
 
 void NetworkHandle::update_column_gradient_and_flow(unsigned short iter_no)
@@ -132,7 +134,8 @@ void NetworkHandle::update_column_gradient_and_flow(unsigned short iter_no)
 #ifndef _OPENMP
     auto rel_gap = total_sys_travel_time > 0 ? total_gap / total_sys_travel_time : std::numeric_limits<double>::max();
     std::cout << "column updating: " << iter_no
-              << "\ntotal gap: " << total_gap << "; relative gap: " << rel_gap * 100 << "%\n";
+              << "\ntotal gap: " << total_gap
+              << "; relative gap: " << rel_gap * 100 << "%\n";
 #else
     std::cout << "column updating: " << iter_no << '\n';
 #endif
@@ -209,7 +212,8 @@ void NetworkHandle::update_column_attributes()
 
     auto rel_gap = total_sys_travel_time > 0 ? total_gap / total_sys_travel_time : std::numeric_limits<double>::max();
     std::cout << "column updating: postprocessing\n"
-              << "total gap: " << total_gap << "; relative gap: " << rel_gap * 100 << "%\n";
+              << "total gap: " << total_gap
+              << "; relative gap: " << rel_gap * 100 << "%\n";
 }
 
 void NetworkHandle::update_link_and_column_volume(unsigned short iter_no, bool reduce_path_vol)
