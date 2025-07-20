@@ -35,3 +35,9 @@
 .vscode
 .DS_Store
 build
+
+# outputs
+columns.csv
+link_performance_dta.csv
+link_performance_ue.csv
+trajectories.csv

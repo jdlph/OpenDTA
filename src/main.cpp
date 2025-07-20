@@ -3,7 +3,7 @@
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Entry point to TransOMS
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #include <handles.h>
@@ -15,15 +15,15 @@
 using namespace transoms;
 using namespace std::chrono;
 
-int main()
+int main(int argc, char* argv[])
 {
     auto ts = high_resolution_clock::now();
 
-    const std::string dir {"../data/Chicago_Regional/"};
-    // const std::string dir {"../data/Chicago_Sketch/"};
-    // const std::string dir {"../data/Two_Corridor/"};
-    // const std::string dir {"../data/Sioux_Falls/"};
-    // const std::string dir {"./"};
+    std::string dir;
+    if (argc == 1)
+        dir = "./";
+    else
+        dir = argv[1];
 
     NetworkHandle nh;
     nh.read_settings(dir);

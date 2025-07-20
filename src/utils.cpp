@@ -28,9 +28,9 @@ using namespace transoms;
 using namespace std::string_literals;
 
 #ifdef __cpp_lib_filesystem
-using namespace std::filesystem;
+namespace fs = std::filesystem;
 #else
-using namespace std::experimental::filesystem;
+namespace fs = std::experimental::filesystem;
 #endif
 
 /**
@@ -519,7 +519,7 @@ void NetworkHandle::read_demands(const std::string& dir)
         for (auto& d : dp->get_demands())
         {
             auto at_no = d.get_agent_type_no();
-            auto file_path = dir + d.get_file_name();
+            auto file_path = dir + '/' + d.get_file_name();
             this->read_demand(file_path, dp_no, at_no);
         }
 
@@ -1013,8 +1013,8 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 
 void NetworkHandle::read_settings(const std::string& dir)
 {
-    path file_path = dir + '/' + "settings.yml";
-    if (exists(file_path))
+    fs::path file_path = dir + '/' + "settings.yml";
+    if (fs::exists(file_path))
         this->read_settings_yml(file_path.string());
     else
         this->auto_setup();
