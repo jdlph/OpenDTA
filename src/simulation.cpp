@@ -1,9 +1,9 @@
 /**
- * @file simulation.cpp, part of the project TransOMS under Apache License 2.0
+ * @file simulation.cpp, part of the project OpenDTA under Apache License 2.0
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of simulation-based Dynamic Traffic Assignment (DTA)
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #include <handles.h>

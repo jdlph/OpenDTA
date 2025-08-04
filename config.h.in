@@ -1,9 +1,9 @@
 /**
- * @file config.h.in, part of the project TransOMS under Apache License 2.0
+ * @file config.h.in, part of the project OpenDTA under Apache License 2.0
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief preprocessor configuration
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #cmakedefine PARALLEL

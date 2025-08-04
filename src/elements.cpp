@@ -1,5 +1,5 @@
 /**
- * @file elements.cpp, part of the project TransOMS under Apache License 2.0
+ * @file elements.cpp, part of the project OpenDTA under Apache License 2.0
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of member functions from demand and supply classes
  *
@@ -11,6 +11,7 @@
 #include <handles.h>
 #include <supply.h>
 
+#include <iostream>
 #include <stdexcept>
 
 #ifdef PARALLEL
@@ -400,6 +401,11 @@ void NetworkHandle::setup_spnetworks()
     std::map<SPNKey, unsigned short> spn_map;
 
     build_connectors();
+
+#ifdef _OPENMP
+    thread_nums = std::max(thread_nums, static_cast<unsigned short>(omp_get_max_threads()));
+#endif
+    std::cout << "OpenDTA uses " << thread_nums << " CPU threads to find UE\n";
 
     unsigned short i = 0;
     for (auto& [k, z] : this->net.get_zones())

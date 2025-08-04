@@ -99,7 +99,7 @@ TransOMS is built on [C++17](https://en.cppreference.com/w/cpp/17) with [yaml-cp
 The build process is defined in [CMakeLists.txt](CMakeLists.txt) along with the above dependency specifications. You will need [CMake](https://cmake.org/download/) (3.15.0 or higher) to build the executable by running the following commands.
 
 ```bash
-# from the root directory of TransOMS
+# from the root directory of OpenDTA
 $ mkdir build
 $ cd build
 $ cmake .. -DCMAKE_BUILD_TYPE=Release
@@ -109,7 +109,7 @@ $ cmake --build .
 The default build is single-processing. To enable parallelization (multiprocessing), you will need to pass PARALLEL=ON (as an option) to CMake.
 
 ```bash
-# from the root directory of TransOMS
+# from the root directory of OpenDTA
 $ mkdir build
 $ cd build
 $ cmake .. -DCMAKE_BUILD_TYPE=Release -DPARALLEL=ON

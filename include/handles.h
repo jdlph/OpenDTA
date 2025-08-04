@@ -1,9 +1,9 @@
 /**
- * @file handles.h, part of the project TransOMS under Apache License 2.0
+ * @file handles.h, part of the project OpenDTA under Apache License 2.0
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Definitions of handle classes with user API
  *
- * @copyright Copyright (c) 2023 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
+ * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
 #ifndef GUARD_HANDLES_H
@@ -214,7 +214,7 @@ private:
     std::vector<const AgentType*> ats;
     std::vector<const DemandPeriod*> dps;
 
-    unsigned short thread_nums = 4;
+    unsigned short thread_nums = 1;
 
     // simulation
     // number of seconds per simulation interval

@@ -1,5 +1,5 @@
 /**
- * @file ue.cpp, part of the project TransOMS under Apache License 2.0
+ * @file ue.cpp, part of the project OpenDTA under Apache License 2.0
  * @author jdlph (jdlph@hotmail.com) and xzhou99 (xzhou74@asu.edu)
  * @brief Implementations of Path-based Static User Equilibrium (UE)
  *
@@ -38,7 +38,7 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     }
 
     auto te = high_resolution_clock::now();
-    std::cout << "TransOMS completes column generation in "
+    std::cout << "OpenDTA completes column generation in "
               << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
 
     for (auto i = 0; i != column_opt_num;)
@@ -57,7 +57,7 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     update_column_attributes();
 
     ts = high_resolution_clock::now();
-    std::cout << "TransOMS completes column updating and postprocessing in "
+    std::cout << "OpenDTA completes column updating and postprocessing in "
               << duration_cast<milliseconds>(ts - te).count() << " milliseconds\n";
 }
 

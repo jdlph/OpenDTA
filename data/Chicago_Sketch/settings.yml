@@ -1,5 +1,5 @@
 ---
-# settings for TransOMS
+# settings for OpenDTA
 agent_type:
   - type: a
     name: auto
