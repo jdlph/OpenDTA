@@ -40,7 +40,7 @@ public:
             delete spn;
     }
 
-    void find_ue(unsigned short column_gen_num, unsigned short column_opt_num);
+    void find_ue();
     void run_simulation();
 
     void load_columns(const std::string& dir = ".", const std::string& filename = "columns.csv");
@@ -53,6 +53,16 @@ public:
 
     void output_link_performance_dta(const std::string& = ".", const std::string& filename = "link_performance_dta.csv");
     void output_link_performance_ue(const std::string& = ".", const std::string& filename = "link_performance_ue.csv");
+
+    bool use_existing_columns() const
+    {
+        return this->use_cols;
+    }
+
+    bool enable_simulation() const
+    {
+        return this->enable_simu;
+    }
 
 private:
     const Link* get_link(size_type link_no) const
@@ -198,6 +208,9 @@ private:
     bool uses_kinematic_wave_model() const;
 
     void validate_demand_periods();
+    void update_ue_settings(unsigned short column_gen_num,
+                            unsigned short column_opd_num,
+                            bool load_columns);
     void update_simulation_settings(unsigned short res, const std::string& model);
 
     static std::string get_time_stamp(double t);
@@ -216,7 +229,13 @@ private:
 
     unsigned short thread_nums = 1;
 
+    // user equilibrium
+    unsigned short column_gen_num = 20;
+    unsigned short column_opd_num = 20;
+    bool use_cols = false;
+
     // simulation
+    bool enable_simu = false;
     // number of seconds per simulation interval
     unsigned short simu_res = 6;
     // simulation duration in minutes

@@ -1,5 +1,16 @@
 ---
 # settings for OpenDTA
+user_equilibrium:
+  load_columns: false
+  column_gen_num: 20
+  column_opd_num: 20
+
+simulation:
+  run_simulation: true
+  # number of seconds per simulation interval
+  resolution: 6
+  traffic_flow_model: kinematic_wave
+
 agent_type:
   - type: a
     name: auto
@@ -34,8 +45,3 @@ demand_period:
           capacity_ratio: 0.6
         - link_id: 4
           capacity_ratio: 0.1
-
-simulation:
-  # number of seconds per simulation interval
-  resolution: 6
-  traffic_flow_model: kinematic_wave

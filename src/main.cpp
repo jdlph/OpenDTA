@@ -28,30 +28,36 @@ int main(int argc, char* argv[])
     NetworkHandle nh;
     nh.read_settings(dir);
     nh.read_network(dir);
-    nh.read_demands(dir);
-    // nh.load_columns();
+
+    if (nh.use_existing_columns())
+        nh.load_columns(dir);
+    else
+        nh.read_demands(dir);
 
     auto te = high_resolution_clock::now();
     std::cout << "OpenDTA loads input in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
     ts = high_resolution_clock::now();
 
-    unsigned short column_gen_num = 20;
-    unsigned short column_opt_num = 20;
-    nh.find_ue(column_gen_num, column_opt_num);
+    nh.find_ue();
 
     te = high_resolution_clock::now();
     std::cout << "OpenDTA finds UE in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
     ts = high_resolution_clock::now();
 
-    nh.run_simulation();
+    if (nh.enable_simulation())
+    {
+        nh.run_simulation();
 
-    te = high_resolution_clock::now();
-    std::cout << "OpenDTA completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
-    ts = high_resolution_clock::now();
+        te = high_resolution_clock::now();
+        std::cout << "OpenDTA completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
+        ts = high_resolution_clock::now();
+    }
 
     nh.output_columns(dir);
     nh.output_link_performance_ue(dir);
-    // nh.output_trajectories();
+
+    if (nh.enable_simulation())
+        nh.output_trajectories(dir);
 
     te = high_resolution_clock::now();
     std::cout << "OpenDTA outputs results in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";

@@ -20,12 +20,12 @@
 using namespace transoms;
 using namespace std::chrono;
 
-void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column_opt_num)
+void NetworkHandle::find_ue()
 {
     auto ts = high_resolution_clock::now();
     setup_spnetworks();
 
-    for (auto i = 0; i != column_gen_num; ++i)
+    for (auto i = 0; i != this->column_gen_num; ++i)
     {
         std::cout << "column generation: " << i << '\n';
         update_link_and_column_volume(i);
@@ -41,7 +41,7 @@ void NetworkHandle::find_ue(unsigned short column_gen_num, unsigned short column
     std::cout << "OpenDTA completes column generation in "
               << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
 
-    for (auto i = 0; i != column_opt_num;)
+    for (auto i = 0; i != this->column_opd_num;)
     {
         update_link_and_column_volume(i, false);
         update_link_travel_time();

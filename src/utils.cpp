@@ -67,8 +67,22 @@ void NetworkHandle::to_lower(std::string& str)
                    [](unsigned char c) {return std::tolower(c);});
 }
 
+void NetworkHandle::update_ue_settings(unsigned short column_gen_num,
+                                       unsigned short column_opd_num,
+                                       bool load_columns)
+{
+    // perform sanity check first
+    if (!load_columns && !column_gen_num)
+        return;
+
+    this->use_cols = load_columns;
+    this->column_gen_num = column_gen_num;
+    this->column_opd_num = column_opd_num;
+}
+
 void NetworkHandle::update_simulation_settings(unsigned short res, const std::string& model)
 {
+    this->enable_simu = true;
     this->simu_res = res;
 
     if (model == "spatial_queue"s || model == "spatial queue"s)
@@ -892,6 +906,21 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 {
     YAML::Node settings = YAML::LoadFile(file_path);
 
+    // set up ue
+    try
+    {
+        const YAML::Node& ue = settings["user_equilibrium"];
+        auto load_columns = ue["load_columns"].as<bool>();
+        auto column_gen_num = ue["column_gen_num"].as<unsigned short>();
+        auto column_upd_num = ue["column_opd_num"].as<unsigned short>();
+
+        this->update_ue_settings(column_gen_num, column_upd_num, load_columns);
+    }
+    catch (const std::exception& e)
+    {
+        // do nothing and set up ue with default settings
+    }
+
     uint8_t i = 0;
     const auto& agents = settings["agent_type"];
     for (const auto& a : agents)
@@ -995,15 +1024,18 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
         this->dps.push_back(new DemandPeriod{Demand{at}});
     }
 
-    // not in use as the simulation module is not implemented yet!
     try
     {
         const YAML::Node& simulation = settings["simulation"];
-        auto res = simulation["resolution"].as<unsigned short>();
-        auto model = simulation["traffic_flow_model"].as<std::string>();
+        auto run_simu = simulation["run_simulation"].as<bool>();
+        if (run_simu)
+        {
+            auto res = simulation["resolution"].as<unsigned short>();
+            auto model = simulation["traffic_flow_model"].as<std::string>();
 
-        this->to_lower(model);
-        this->update_simulation_settings(res, model);
+            this->to_lower(model);
+            this->update_simulation_settings(res, model);
+        }
     }
     catch (const std::exception& e)
     {
