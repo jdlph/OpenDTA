@@ -67,15 +67,19 @@ void NetworkHandle::to_lower(std::string& str)
                    [](unsigned char c) {return std::tolower(c);});
 }
 
-void NetworkHandle::update_ue_settings(unsigned short column_gen_num,
-                                       unsigned short column_opd_num,
-                                       bool load_columns)
+void NetworkHandle::update_ue_settings(bool load_columns,
+                                       unsigned short column_gen_num,
+                                       unsigned short column_opd_num)
 {
     // perform sanity check first
     if (!load_columns && !column_gen_num)
+    {
+        std::cout << "WRONG SETTINGS FOUND FOR load_columns AND column_gen_num!\n";
+        std::cout << "USE DEFAULT SETTINGS, load_columns: false, column_gen_num: 20, column_opd_num: 20\n";
         return;
+    }
 
-    this->use_cols = load_columns;
+    this->use_existing_cols = load_columns;
     this->column_gen_num = column_gen_num;
     this->column_opd_num = column_opd_num;
 }
@@ -914,7 +918,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
         auto column_gen_num = ue["column_gen_num"].as<unsigned short>();
         auto column_upd_num = ue["column_opd_num"].as<unsigned short>();
 
-        this->update_ue_settings(column_gen_num, column_upd_num, load_columns);
+        this->update_ue_settings(load_columns, column_gen_num, column_upd_num);
     }
     catch (const std::exception& e)
     {
@@ -1027,7 +1031,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
     try
     {
         const YAML::Node& simulation = settings["simulation"];
-        auto run_simu = simulation["run_simulation"].as<bool>();
+        auto run_simu = simulation["enable"].as<bool>();
         if (run_simu)
         {
             auto res = simulation["resolution"].as<unsigned short>();

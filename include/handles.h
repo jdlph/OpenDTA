@@ -14,6 +14,7 @@
 
 namespace transoms
 {
+
 enum class TrafficFlowModel {
     point_queue, spatial_queue, kinematic_wave
 };
@@ -56,7 +57,7 @@ public:
 
     bool use_existing_columns() const
     {
-        return this->use_cols;
+        return this->use_existing_cols;
     }
 
     bool enable_simulation() const
@@ -208,9 +209,9 @@ private:
     bool uses_kinematic_wave_model() const;
 
     void validate_demand_periods();
-    void update_ue_settings(unsigned short column_gen_num,
-                            unsigned short column_opd_num,
-                            bool load_columns);
+    void update_ue_settings(bool load_columns,
+                            unsigned short column_gen_num,
+                            unsigned short column_opd_num);
     void update_simulation_settings(unsigned short res, const std::string& model);
 
     static std::string get_time_stamp(double t);
@@ -230,9 +231,9 @@ private:
     unsigned short thread_nums = 1;
 
     // user equilibrium
+    bool use_existing_cols = false;
     unsigned short column_gen_num = 20;
     unsigned short column_opd_num = 20;
-    bool use_cols = false;
 
     // simulation
     bool enable_simu = false;
