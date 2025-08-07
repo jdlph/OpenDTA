@@ -53,11 +53,20 @@ int main(int argc, char* argv[])
         ts = high_resolution_clock::now();
     }
 
-    nh.output_columns(dir);
-    nh.output_link_performance_ue(dir);
+    if (nh.saves_link_performance_ue())
+        nh.output_link_performance_ue(dir);
+
+    if (nh.saves_ue_path_flow())
+        nh.output_columns(dir);
 
     if (nh.enable_simulation())
-        nh.output_trajectories(dir);
+    {
+        if (nh.saves_link_performance_dta())
+            nh.output_link_performance_dta(dir);
+
+        if (nh.saves_trajectory())
+            nh.output_trajectories(dir);
+    }
 
     te = high_resolution_clock::now();
     std::cout << "OpenDTA outputs results in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";

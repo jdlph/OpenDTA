@@ -65,6 +65,26 @@ public:
         return this->enable_simu;
     }
 
+    bool saves_link_performance_dta() const
+    {
+        return this->m_saves_link_perf_dta;
+    }
+
+    bool saves_link_performance_ue() const
+    {
+        return this->m_saves_link_perf_ue;
+    }
+
+    bool saves_trajectory() const
+    {
+        return this->m_saves_agent_trajectory;
+    }
+
+    bool saves_ue_path_flow() const
+    {
+        return this->m_saves_path_flow;
+    }
+
 private:
     const Link* get_link(size_type link_no) const
     {
@@ -250,6 +270,12 @@ private:
     std::vector<Agent> agents;
     // time-dependent agents for simulation
     std::map<size_type, std::vector<size_type>> td_agents;
+
+    // output
+    bool m_saves_link_perf_ue = true;
+    bool m_saves_link_perf_dta = true;
+    bool m_saves_path_flow = true;
+    bool m_saves_agent_trajectory = true;
 };
 
 } // namespace transoms

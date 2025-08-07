@@ -919,6 +919,23 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
         auto column_upd_num = ue["column_opd_num"].as<unsigned short>();
 
         this->update_ue_settings(load_columns, column_gen_num, column_upd_num);
+
+        const auto& outputs = ue["output"];
+        for (const auto& output : outputs)
+        {
+            auto output_type = output["type"].as<std::string>();
+            auto enable = output["enable"].as<bool>();
+            
+            this->to_lower(output_type);
+            if (output_type == "link_performance"s)
+            {
+                this->m_saves_link_perf_ue = enable;
+            }
+            else if (output_type == "ue_path_flow"s)
+            {
+                this->m_saves_path_flow = enable;
+            }
+        }
     }
     catch (const std::exception& e)
     {
@@ -1039,6 +1056,23 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 
             this->to_lower(model);
             this->update_simulation_settings(res, model);
+
+            const auto& outputs = simulation["output"];
+            for (const auto& output : outputs)
+            {
+                auto output_type = output["type"].as<std::string>();
+                auto enable = output["enable"].as<bool>();
+                
+                this->to_lower(output_type);
+                if (output_type == "dynamic_link_performance"s)
+                {
+                    this->m_saves_link_perf_dta = enable;
+                }
+                else if (output_type == "agent_trajectory"s)
+                {
+                    this->m_saves_agent_trajectory = enable;
+                }
+            }
         }
     }
     catch (const std::exception& e)
@@ -1234,4 +1268,6 @@ void NetworkHandle::output_trajectories(const std::string& dir, const std::strin
         writer.append(this->get_node_path_coordinates(col));
         writer.append(time_seq_str, '\n');
     }
+
+    std::cout << "check " << filename << " in " << dir <<  " for agent trajectory under DTA\n";
 }

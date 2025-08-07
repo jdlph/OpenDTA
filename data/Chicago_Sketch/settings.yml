@@ -4,12 +4,26 @@ user_equilibrium:
   load_columns: false
   column_gen_num: 20
   column_opd_num: 20
+  output:
+    - type: link_performance
+      enable: true
+      file_name: link_performance_ue.csv
+    - type: ue_path_flow
+      enable: true
+      file_name: columns.csv
 
 simulation:
   enable: false
   # number of seconds per simulation interval
   resolution: 6
   traffic_flow_model: kinematic_wave
+  output:
+    - type: dynamic_link_performance
+      enable: false
+      file_name: link_performance_dta.csv
+    - type: agent_trajectory
+      enable: false
+      file_name: trajectories.csv
 
 agent_type:
   - type: a
