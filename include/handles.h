@@ -58,16 +58,16 @@ public:
 
     void setup_working_dirs(const char*, const char*);
 
-    void load_columns(const std::string& filename = "columns.csv");
+    void load_columns();
     void read_demands();
     void read_network();
     void read_settings();
 
-    void output_columns(const std::string& filename = "columns.csv");
-    void output_trajectories(const std::string& filename = "trajectories.csv");
+    void output_columns();
+    void output_trajectories();
 
-    void output_link_performance_dta(const std::string& filename = "link_performance_dta.csv");
-    void output_link_performance_ue(const std::string& filename = "link_performance_ue.csv");
+    void output_link_performance_dta();
+    void output_link_performance_ue();
 
     bool uses_existing_columns() const
     {
@@ -200,12 +200,12 @@ private:
     }
 
 private:
-    void read_demand(const std::string& dir, unsigned short dp_no, unsigned short at_no);
+    void read_demand(const std::string& file_path, unsigned short dp_no, unsigned short at_no);
     void read_settings_yml(const std::string& file_path);
     void auto_setup();
 
-    void read_links(const std::string& filename = "link.csv");
-    void read_nodes(const std::string& filename = "node.csv");
+    void read_links();
+    void read_nodes();
 
     void update_column_attributes();
     void update_column_gradient_and_flow(unsigned short iter_no);
@@ -294,6 +294,15 @@ private:
     // IO
     fs::path input_dir;
     fs::path output_dir;
+
+    // default file names
+    // the default file name for demand is specified in class Demand
+    std::string m_node_filename = "node.csv";
+    std::string m_link_filename = "link.csv";
+    std::string m_cols_filename = "columns.csv";
+    std::string m_link_perf_ue_filename = "link_performance_ue.csv";
+    std::string m_link_perf_dta_filename = "link_performance_dta.csv";
+    std::string m_traj_filename = "trajectories.csv";
 
     // output
     bool m_enables_output = true;

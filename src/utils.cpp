@@ -219,10 +219,10 @@ void NetworkHandle::update_od_vol()
     }
 }
 
-void NetworkHandle::load_columns(const std::string& filename)
+void NetworkHandle::load_columns()
 {
-    auto reader = miocsv::DictReader(input_dir.string() + '/' + filename);
-    std::cout << "start loading columns from " << filename << '\n';
+    auto reader = miocsv::DictReader(input_dir.string() + '/' + this->m_cols_filename);
+    std::cout << "start loading columns from " << this->m_cols_filename << '\n';
 
     size_type count = 0;
     for (const auto& line : reader)
@@ -446,9 +446,9 @@ void NetworkHandle::load_columns(const std::string& filename)
     std::cout << "loading columns completed. " << count << " columns are loaded.\n";
 }
 
-void NetworkHandle::read_demand(const std::string& dir, unsigned short dp_no, unsigned short at_no)
+void NetworkHandle::read_demand(const std::string& file_path, unsigned short dp_no, unsigned short at_no)
 {
-    auto reader = miocsv::DictReader(dir);
+    auto reader = miocsv::DictReader(file_path);
 
     size_type void_od_num = 0;
     double void_vol = 0;
@@ -562,9 +562,9 @@ void NetworkHandle::read_demands()
     }
 }
 
-void NetworkHandle::read_nodes(const std::string& filename)
+void NetworkHandle::read_nodes()
 {
-    auto reader = miocsv::DictReader(input_dir.string() + '/' + filename);
+    auto reader = miocsv::DictReader(this->input_dir.string() + '/' + this->m_node_filename);
 
     size_type node_no = 0;
     for (const auto& line : reader)
@@ -650,9 +650,9 @@ void NetworkHandle::read_nodes(const std::string& filename)
 
 }
 
-void NetworkHandle::read_links(const std::string& filename)
+void NetworkHandle::read_links()
 {
-    auto reader = miocsv::DictReader(input_dir.string() + '/' + filename);
+    auto reader = miocsv::DictReader(this->input_dir.string() + '/' + this->m_link_filename);
     const auto& headers = reader.get_fieldnames();
 
     std::vector<HeaderPos> vec;
@@ -1111,16 +1111,16 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 
 void NetworkHandle::read_settings()
 {
-    fs::path file_path = input_dir.string() + '/' + "settings.yml";
+    fs::path file_path = this->input_dir.string() + '/' + "settings.yml";
     if (fs::exists(file_path))
         this->read_settings_yml(file_path.string());
     else
         this->auto_setup();
 }
 
-void NetworkHandle::output_columns(const std::string& filename)
+void NetworkHandle::output_columns()
 {
-    auto writer = miocsv::Writer(output_dir.string() + '/' + filename);
+    auto writer = miocsv::Writer(output_dir.string() + '/' + this->m_cols_filename);
 
     writer.write_row_raw("agent_id", "o_zone_id", "d_zone_id", "path_id", "agent_type",
                          "demand_period", "volume", "toll", "travel_time", "distance",
@@ -1164,12 +1164,12 @@ void NetworkHandle::output_columns(const std::string& filename)
         }
     }
 
-    std::cout << "check " << filename << " in " << output_dir <<  " for UE results\n";
+    std::cout << "check " << this->m_cols_filename << " in " << output_dir <<  " for UE results\n";
 }
 
-void NetworkHandle::output_link_performance_dta(const std::string& filename)
+void NetworkHandle::output_link_performance_dta()
 {
-    auto writer = miocsv::Writer(output_dir.string() + '/' + filename);
+    auto writer = miocsv::Writer(output_dir.string() + '/' + this->m_link_perf_dta_filename);
 
     writer.write_row_raw("link_id", "from_node_id", "to_node_id", "time_period", "volume",
                          "travel_time",  "waiting_time", "speed", "CA", "CD", "density", "queue");
@@ -1218,12 +1218,12 @@ void NetworkHandle::output_link_performance_dta(const std::string& filename)
         }
     }
 
-    std::cout << "check " << filename << " in " << output_dir <<  " for link performance under DTA\n";
+    std::cout << "check " << this->m_link_perf_dta_filename << " in " << this->output_dir <<  " for link performance under DTA\n";
 }
 
-void NetworkHandle::output_link_performance_ue(const std::string& filename)
+void NetworkHandle::output_link_performance_ue()
 {
-    auto writer = miocsv::Writer(output_dir.string() + '/' + filename);
+    auto writer = miocsv::Writer(this->output_dir.string() + '/' + this->m_link_perf_ue_filename);
 
     writer.write_row_raw("link_id", "from_node_id", "to_node_id", "time_period", "volume",
                          "travel_time", "speed", "VOC", "queue", "density", "geometry");
@@ -1245,12 +1245,12 @@ void NetworkHandle::output_link_performance_ue(const std::string& filename)
         }
     }
 
-    std::cout << "check " << filename << " in " << output_dir <<  " for link performance under UE\n";
+    std::cout << "check " << this->m_link_perf_ue_filename << " in " << this->output_dir <<  " for link performance under UE\n";
 }
 
-void NetworkHandle::output_trajectories(const std::string& filename)
+void NetworkHandle::output_trajectories()
 {
-    auto writer = miocsv::Writer(output_dir.string() + '/' + filename);
+    auto writer = miocsv::Writer(this->output_dir.string() + '/' + this->m_traj_filename);
 
     writer.write_row_raw("agent_id", "o_zone_id", "d_zone_id", "dep_time", "arr_time", "trip_completed",
                          "travel_time", "PCE", "travel_distance", "node_path", "geometry", "time_sequence");
@@ -1297,7 +1297,7 @@ void NetworkHandle::output_trajectories(const std::string& filename)
         writer.append(time_seq_str, '\n');
     }
 
-    std::cout << "check " << filename << " in " << output_dir <<  " for agent trajectory under DTA\n";
+    std::cout << "check " << this->m_traj_filename << " in " << this->output_dir <<  " for agent trajectory under DTA\n";
 }
 
 void NetworkHandle::setup_working_dirs(const char* argv1, const char* argv2)
