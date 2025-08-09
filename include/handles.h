@@ -249,6 +249,7 @@ private:
     std::vector<const DemandPeriod*> dps;
 
     unsigned short thread_nums = 1;
+    unsigned short max_threads = std::numeric_limits<unsigned short>::max(); 
 
     // user equilibrium
     bool use_existing_cols = false;

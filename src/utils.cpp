@@ -920,20 +920,38 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
 
         this->update_ue_settings(load_columns, column_gen_num, column_upd_num);
 
+        try
+        {
+            auto max_cpu_threads = ue["max_cpu_threads"].as<unsigned short>();
+            this->max_threads = max_cpu_threads;
+        }
+        catch (const std::exception& e)
+        {
+            // do nothing
+        }
+
         const auto& outputs = ue["output"];
         for (const auto& output : outputs)
         {
-            auto output_type = output["type"].as<std::string>();
-            auto enable = output["enable"].as<bool>();
-            
-            this->to_lower(output_type);
-            if (output_type == "link_performance"s)
+            try
             {
-                this->m_saves_link_perf_ue = enable;
+                auto output_type = output["type"].as<std::string>();
+                auto enable = output["enable"].as<bool>();
+                auto file_name = output["file_name"].as<std::string>();
+
+                this->to_lower(output_type);
+                if (output_type == "link_performance"s)
+                {
+                    this->m_saves_link_perf_ue = enable;
+                }
+                else if (output_type == "ue_path_flow"s)
+                {
+                    this->m_saves_path_flow = enable;
+                }
             }
-            else if (output_type == "ue_path_flow"s)
+            catch (const std::exception& e)
             {
-                this->m_saves_path_flow = enable;
+                // do nothing
             }
         }
     }
@@ -1062,7 +1080,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
             {
                 auto output_type = output["type"].as<std::string>();
                 auto enable = output["enable"].as<bool>();
-                
+
                 this->to_lower(output_type);
                 if (output_type == "dynamic_link_performance"s)
                 {
