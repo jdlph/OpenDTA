@@ -12,6 +12,18 @@
 #include <demand.h>
 #include <supply.h>
 
+#ifdef __cpp_lib_filesystem
+#include <filesystem>
+#else
+#include <experimental/filesystem>
+#endif
+
+#ifdef __cpp_lib_filesystem
+namespace fs = std::filesystem;
+#else
+namespace fs = std::experimental::filesystem;
+#endif
+
 namespace transoms
 {
 
@@ -44,16 +56,18 @@ public:
     void find_ue();
     void run_simulation();
 
-    void load_columns(const std::string& dir = ".", const std::string& filename = "columns.csv");
-    void read_demands(const std::string& dir);
-    void read_network(const std::string& dir);
-    void read_settings(const std::string& dir);
+    void setup_working_dirs(const char*, const char*);
 
-    void output_columns(const std::string& dir = ".", const std::string& filename = "columns.csv");
-    void output_trajectories(const std::string& = ".", const std::string& filename = "trajectories.csv");
+    void load_columns(const std::string& filename = "columns.csv");
+    void read_demands();
+    void read_network();
+    void read_settings();
 
-    void output_link_performance_dta(const std::string& = ".", const std::string& filename = "link_performance_dta.csv");
-    void output_link_performance_ue(const std::string& = ".", const std::string& filename = "link_performance_ue.csv");
+    void output_columns(const std::string& filename = "columns.csv");
+    void output_trajectories(const std::string& filename = "trajectories.csv");
+
+    void output_link_performance_dta(const std::string& filename = "link_performance_dta.csv");
+    void output_link_performance_ue(const std::string& filename = "link_performance_ue.csv");
 
     bool uses_existing_columns() const
     {
@@ -190,8 +204,8 @@ private:
     void read_settings_yml(const std::string& file_path);
     void auto_setup();
 
-    void read_links(const std::string& dir, const std::string& filename = "link.csv");
-    void read_nodes(const std::string& dir, const std::string& filename = "node.csv");
+    void read_links(const std::string& filename = "link.csv");
+    void read_nodes(const std::string& filename = "node.csv");
 
     void update_column_attributes();
     void update_column_gradient_and_flow(unsigned short iter_no);
@@ -278,8 +292,8 @@ private:
     std::map<size_type, std::vector<size_type>> td_agents;
 
     // IO
-    // fs::path input_dir;
-    // fs::path output_dir;
+    fs::path input_dir;
+    fs::path output_dir;
 
     // output
     bool m_enables_output = true;

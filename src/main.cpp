@@ -18,32 +18,21 @@ int main(int argc, char* argv[])
     auto mini_timer = MiniTimer();
     mini_timer.start();
 
-    std::string input_dir;
-    std::string output_dir;
-    if (argc == 1)
-    {
-        input_dir = "./";
-        output_dir = "./";
-    }
-    else if (argc == 2)
-    {
-        input_dir = argv[1];
-        output_dir = argv[1];
-    }
-    else if (argc == 3)
-    {
-        input_dir = argv[1];
-        output_dir = argv[2];
-    }
-
     NetworkHandle nh;
-    nh.read_settings(input_dir);
-    nh.read_network(input_dir);
+    if (argc == 1)
+        nh.setup_working_dirs("./", "./");
+    else if (argc == 2)
+        nh.setup_working_dirs(argv[1], argv[1]);
+    else if (argc == 3)
+        nh.setup_working_dirs(argv[1], argv[2]);
+
+    nh.read_settings();
+    nh.read_network();
 
     if (nh.uses_existing_columns())
-        nh.load_columns(input_dir);
+        nh.load_columns();
     else
-        nh.read_demands(input_dir);
+        nh.read_demands();
 
     mini_timer.stop();
     mini_timer.broadcast("OpenDTA loads input in ");
@@ -69,18 +58,18 @@ int main(int argc, char* argv[])
         mini_timer.start();
 
         if (nh.saves_link_performance_ue())
-            nh.output_link_performance_ue(output_dir);
+            nh.output_link_performance_ue();
 
         if (nh.saves_ue_path_flow())
-            nh.output_columns(output_dir);
+            nh.output_columns();
 
         if (nh.enables_simulation())
         {
             if (nh.saves_link_performance_dta())
-                nh.output_link_performance_dta(output_dir);
+                nh.output_link_performance_dta();
 
             if (nh.saves_trajectory())
-                nh.output_trajectories(output_dir);
+                nh.output_trajectories();
         }
 
         mini_timer.stop();
