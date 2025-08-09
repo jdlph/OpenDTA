@@ -4,6 +4,7 @@ user_equilibrium:
   load_columns: false
   column_gen_num: 20
   column_opd_num: 20
+  max_cpu_threads: 1
 
 simulation:
   enable: false

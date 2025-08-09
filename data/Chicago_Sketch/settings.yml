@@ -7,10 +7,10 @@ user_equilibrium:
   max_cpu_threads: 4
   output:
     - type: link_performance
-      enable: false
+      enable: true
       file_name: link_performance_ue.csv
     - type: ue_path_flow
-      enable: false
+      enable: true
       file_name: columns.csv
 
 simulation:

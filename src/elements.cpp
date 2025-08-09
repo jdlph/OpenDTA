@@ -404,6 +404,7 @@ void NetworkHandle::setup_spnetworks()
 
 #ifdef _OPENMP
     thread_nums = std::min(max_threads, std::max(thread_nums, static_cast<unsigned short>(omp_get_max_threads())));
+    omp_set_num_threads(thread_nums);
 #endif
     std::cout << "OpenDTA is using up to " << thread_nums << " CPU threads to find UE\n";
 

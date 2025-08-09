@@ -277,6 +277,10 @@ private:
     // time-dependent agents for simulation
     std::map<size_type, std::vector<size_type>> td_agents;
 
+    // IO
+    // fs::path input_dir;
+    // fs::path output_dir;
+
     // output
     bool m_enables_output = true;
     bool m_saves_link_perf_ue = true;
