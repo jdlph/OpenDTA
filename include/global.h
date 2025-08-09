@@ -11,10 +11,15 @@
 
 #define MLC_DEQUE
 
+#include <chrono>
 #include <cstdint>
+#include <iostream>
 #include <random>
 #include <string>
+#include <string_view>
 #include <tuple>
+
+namespace ch = std::chrono;
 
 namespace transoms
 {
@@ -74,6 +79,36 @@ T uniform(T lb, T ub)
 
     return dis(gen);
 }
+
+class MiniTimer {
+public:
+    MiniTimer() = default;
+
+    MiniTimer(const MiniTimer&) = delete;
+    MiniTimer& operator=(const MiniTimer) = delete;
+
+    MiniTimer(MiniTimer&&) = delete;
+    MiniTimer& operator=(MiniTimer&&) = delete;
+
+    void start()
+    {
+        st = ch::high_resolution_clock::now();
+    }
+
+    void stop()
+    {
+        et = ch::high_resolution_clock::now();
+    }
+
+    void broadcast(std::string_view msg)
+    {
+        std::cout << msg << ch::duration_cast<ch::milliseconds>(et - st).count() << " milliseconds\n";
+    }
+
+private:
+    ch::steady_clock::time_point st;
+    ch::steady_clock::time_point et;
+};
 
 } // namespace transoms
 

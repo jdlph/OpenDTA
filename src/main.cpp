@@ -8,16 +8,15 @@
 
 #include <handles.h>
 
-#include <chrono>
 #include <iostream>
 #include <string>
 
 using namespace transoms;
-using namespace std::chrono;
 
 int main(int argc, char* argv[])
 {
-    auto ts = high_resolution_clock::now();
+    auto mini_timer = MiniTimer();
+    mini_timer.start();
 
     std::string dir;
     if (argc == 1)
@@ -34,24 +33,26 @@ int main(int argc, char* argv[])
     else
         nh.read_demands(dir);
 
-    auto te = high_resolution_clock::now();
-    std::cout << "OpenDTA loads input in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
-    ts = high_resolution_clock::now();
+    mini_timer.stop();
+    mini_timer.broadcast("OpenDTA loads input in ");
+
+    mini_timer.start();
 
     nh.find_ue();
 
-    te = high_resolution_clock::now();
-    std::cout << "OpenDTA finds UE in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
-    ts = high_resolution_clock::now();
+    mini_timer.stop();
+    mini_timer.broadcast("OpenDTA finds UE in ");
 
     if (nh.enable_simulation())
     {
+        mini_timer.start();
         nh.run_simulation();
 
-        te = high_resolution_clock::now();
-        std::cout << "OpenDTA completes DTA in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
-        ts = high_resolution_clock::now();
+        mini_timer.stop();
+        mini_timer.broadcast("OpenDTA completes DTA in ");
     }
+
+    mini_timer.start();
 
     if (nh.saves_link_performance_ue())
         nh.output_link_performance_ue(dir);
@@ -68,6 +69,6 @@ int main(int argc, char* argv[])
             nh.output_trajectories(dir);
     }
 
-    te = high_resolution_clock::now();
-    std::cout << "OpenDTA outputs results in " << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
+    mini_timer.stop();
+    mini_timer.broadcast("OpenDTA outputs results in ");
 }

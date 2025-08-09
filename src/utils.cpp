@@ -985,7 +985,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
         }
         catch(const std::exception& e)
         {
-            // do nothing
+            // do nothing and move to the next one
         }
     }
 
@@ -1043,7 +1043,6 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
             catch(const std::exception& e)
             {
                 std::cerr << at_name << " is not existing in settings.yml\n";
-                continue;
             }
         }
     }
@@ -1078,17 +1077,24 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
             const auto& outputs = simulation["output"];
             for (const auto& output : outputs)
             {
-                auto output_type = output["type"].as<std::string>();
-                auto enable = output["enable"].as<bool>();
+                try
+                {
+                    auto output_type = output["type"].as<std::string>();
+                    auto enable = output["enable"].as<bool>();
 
-                this->to_lower(output_type);
-                if (output_type == "dynamic_link_performance"s)
-                {
-                    this->m_saves_link_perf_dta = enable;
+                    this->to_lower(output_type);
+                    if (output_type == "dynamic_link_performance"s)
+                    {
+                        this->m_saves_link_perf_dta = enable;
+                    }
+                    else if (output_type == "agent_trajectory"s)
+                    {
+                        this->m_saves_agent_trajectory = enable;
+                    }
                 }
-                else if (output_type == "agent_trajectory"s)
+                catch(const std::exception& e)
                 {
-                    this->m_saves_agent_trajectory = enable;
+                    // do nothing and move to the next one
                 }
             }
         }

@@ -9,7 +9,6 @@
 #include <config.h>
 #include <handles.h>
 
-#include <chrono>
 #include <cmath>
 #include <iostream>
 
@@ -18,11 +17,12 @@
 #endif
 
 using namespace transoms;
-using namespace std::chrono;
 
 void NetworkHandle::find_ue()
 {
-    auto ts = high_resolution_clock::now();
+    auto mini_timer = MiniTimer();
+    mini_timer.start();
+
     setup_spnetworks();
 
     for (auto i = 0; i != this->column_gen_num; ++i)
@@ -37,9 +37,9 @@ void NetworkHandle::find_ue()
             this->spns[j]->generate_columns(i);
     }
 
-    auto te = high_resolution_clock::now();
-    std::cout << "OpenDTA completes column generation in "
-              << duration_cast<milliseconds>(te - ts).count() << " milliseconds\n";
+    mini_timer.stop();
+    mini_timer.broadcast("OpenDTA completes column generation in ");
+    mini_timer.start();
 
     for (auto i = 0; i != this->column_opd_num;)
     {
@@ -56,9 +56,8 @@ void NetworkHandle::find_ue()
     update_link_travel_time();
     update_column_attributes();
 
-    ts = high_resolution_clock::now();
-    std::cout << "OpenDTA completes column updating and postprocessing in "
-              << duration_cast<milliseconds>(ts - te).count() << " milliseconds\n";
+    mini_timer.stop();
+    mini_timer.broadcast("OpenDTA completes column updating and postprocessing in ");
 }
 
 void NetworkHandle::update_column_gradient_and_flow(unsigned short iter_no)
