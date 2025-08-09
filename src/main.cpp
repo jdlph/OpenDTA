@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     nh.read_settings(dir);
     nh.read_network(dir);
 
-    if (nh.use_existing_columns())
+    if (nh.uses_existing_columns())
         nh.load_columns(dir);
     else
         nh.read_demands(dir);
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     mini_timer.stop();
     mini_timer.broadcast("OpenDTA finds UE in ");
 
-    if (nh.enable_simulation())
+    if (nh.enables_simulation())
     {
         mini_timer.start();
         nh.run_simulation();
@@ -52,23 +52,26 @@ int main(int argc, char* argv[])
         mini_timer.broadcast("OpenDTA completes DTA in ");
     }
 
-    mini_timer.start();
-
-    if (nh.saves_link_performance_ue())
-        nh.output_link_performance_ue(dir);
-
-    if (nh.saves_ue_path_flow())
-        nh.output_columns(dir);
-
-    if (nh.enable_simulation())
+    if (nh.enables_output())
     {
-        if (nh.saves_link_performance_dta())
-            nh.output_link_performance_dta(dir);
+        mini_timer.start();
 
-        if (nh.saves_trajectory())
-            nh.output_trajectories(dir);
+        if (nh.saves_link_performance_ue())
+            nh.output_link_performance_ue(dir);
+
+        if (nh.saves_ue_path_flow())
+            nh.output_columns(dir);
+
+        if (nh.enables_simulation())
+        {
+            if (nh.saves_link_performance_dta())
+                nh.output_link_performance_dta(dir);
+
+            if (nh.saves_trajectory())
+                nh.output_trajectories(dir);
+        }
+
+        mini_timer.stop();
+        mini_timer.broadcast("OpenDTA outputs results in ");
     }
-
-    mini_timer.stop();
-    mini_timer.broadcast("OpenDTA outputs results in ");
 }

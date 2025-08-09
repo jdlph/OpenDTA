@@ -79,14 +79,14 @@ void NetworkHandle::update_ue_settings(bool load_columns,
         return;
     }
 
-    this->use_existing_cols = load_columns;
+    this->m_uses_existing_cols = load_columns;
     this->column_gen_num = column_gen_num;
     this->column_opd_num = column_opd_num;
 }
 
 void NetworkHandle::update_simulation_settings(unsigned short res, const std::string& model)
 {
-    this->enable_simu = true;
+    this->m_enable_simu = true;
     this->simu_res = res;
 
     if (model == "spatial_queue"s || model == "spatial queue"s)
@@ -1103,6 +1103,10 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
     {
         // do nothing and set up simulation with default settings
     }
+
+    if (!this->m_saves_path_flow && !this->m_saves_link_perf_ue &&
+        (!this->m_enable_simu || (!this->m_saves_agent_trajectory && !this->m_saves_link_perf_dta)))
+        this->m_enables_output = false;
 }
 
 void NetworkHandle::read_settings(const std::string& dir)

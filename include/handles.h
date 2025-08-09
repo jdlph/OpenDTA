@@ -55,14 +55,19 @@ public:
     void output_link_performance_dta(const std::string& = ".", const std::string& filename = "link_performance_dta.csv");
     void output_link_performance_ue(const std::string& = ".", const std::string& filename = "link_performance_ue.csv");
 
-    bool use_existing_columns() const
+    bool uses_existing_columns() const
     {
-        return this->use_existing_cols;
+        return this->m_uses_existing_cols;
     }
 
-    bool enable_simulation() const
+    bool enables_simulation() const
     {
-        return this->enable_simu;
+        return this->m_enable_simu;
+    }
+
+    bool enables_output() const
+    {
+        return this->m_enables_output;
     }
 
     bool saves_link_performance_dta() const
@@ -249,15 +254,15 @@ private:
     std::vector<const DemandPeriod*> dps;
 
     unsigned short thread_nums = 1;
-    unsigned short max_threads = std::numeric_limits<unsigned short>::max(); 
+    unsigned short max_threads = std::numeric_limits<unsigned short>::max();
 
     // user equilibrium
-    bool use_existing_cols = false;
+    bool m_uses_existing_cols = false;
     unsigned short column_gen_num = 20;
     unsigned short column_opd_num = 20;
 
     // simulation
-    bool enable_simu = false;
+    bool m_enable_simu = false;
     // number of seconds per simulation interval
     unsigned short simu_res = 6;
     // simulation duration in minutes
@@ -273,6 +278,7 @@ private:
     std::map<size_type, std::vector<size_type>> td_agents;
 
     // output
+    bool m_enables_output = true;
     bool m_saves_link_perf_ue = true;
     bool m_saves_link_perf_dta = true;
     bool m_saves_path_flow = true;
