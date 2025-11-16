@@ -12,6 +12,7 @@ user_equilibrium:
     - type: ue_path_flow
       enable: true
       file_name: columns.csv
+      include_path_geometry: false
 
 simulation:
   enable: false

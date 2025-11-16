@@ -937,6 +937,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
             {
                 auto output_type = output["type"].as<std::string>();
                 auto enable = output["enable"].as<bool>();
+                // useless
                 auto file_name = output["file_name"].as<std::string>();
 
                 this->to_lower(output_type);
@@ -947,6 +948,7 @@ void NetworkHandle::read_settings_yml(const std::string& file_path)
                 else if (output_type == "ue_path_flow"s)
                 {
                     this->m_saves_path_flow = enable;
+                    this->m_includes_path_geometry = output["include_path_geometry"].as<bool>();;
                 }
             }
             catch (const std::exception& e)
@@ -1154,13 +1156,13 @@ void NetworkHandle::output_columns()
             writer.append(col.get_travel_time());
             writer.append(col.get_dist());
 
-            auto link_path = this->get_link_path_str(col);
-            auto node_path = this->get_node_path_str(col);
-            auto geo = this->get_node_path_coordinates(col);
+            writer.append(this->get_link_path_str(col));
+            writer.append(this->get_node_path_str(col));
 
-            writer.append(link_path);
-            writer.append(node_path);
-            writer.append(geo, '\n');
+            if (this->m_includes_path_geometry)
+                writer.append(this->get_node_path_coordinates(col), '\n');
+            else
+                writer.append("", '\n');
         }
     }
 

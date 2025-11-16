@@ -310,6 +310,7 @@ private:
     bool m_saves_link_perf_dta = true;
     bool m_saves_path_flow = true;
     bool m_saves_agent_trajectory = true;
+    bool m_includes_path_geometry = false;
 };
 
 } // namespace transoms
