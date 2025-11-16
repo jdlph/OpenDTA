@@ -1216,7 +1216,7 @@ void NetworkHandle::output_link_performance_dta()
             writer.append(link_que.get_cumulative_arrival(t));
             writer.append(link_que.get_cumulative_departure(t));
             writer.append(link_que.get_density(t));
-            writer.append(link_que.get_queue(t, dp_no));
+            writer.append(link_que.get_queue(t, dp_no), '\n');
         }
     }
 
@@ -1228,7 +1228,7 @@ void NetworkHandle::output_link_performance_ue()
     auto writer = miocsv::Writer(this->output_dir.string() + '/' + this->m_link_perf_ue_filename);
 
     writer.write_row_raw("link_id", "from_node_id", "to_node_id", "time_period", "volume",
-                         "travel_time", "speed", "VOC", "queue", "density", "geometry");
+                         "travel_time", "speed", "VOC", "geometry");
 
     for (const auto link : this->net.get_links())
     {
@@ -1243,7 +1243,7 @@ void NetworkHandle::output_link_performance_ue()
 
             writer.write_row_raw(link->get_id(), this->get_head_node_id(link), this->get_tail_node_id(link),
                                  dp->get_period(), link->get_period_vol(dp_no), tt, spd, link->get_period_voc(dp_no),
-                                 ' ', ' ', link->get_geometry());
+                                 link->get_geometry());
         }
     }
 

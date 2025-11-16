@@ -1170,22 +1170,13 @@ public:
     SPNetwork(SPNetwork&&) = delete;
     SPNetwork& operator=(SPNetwork&&) = delete;
 
-    // exit code -1073740940 will be generated on Windows if simply using delete[]
-    // the following destructor can be replaced by ~SPNetwork() = default;
-    ~SPNetwork()
-    {
-        const auto m = get_link_num();
-        const auto n = get_node_num();
-
-        double_alloc.deallocate(link_costs, m);
-        double_alloc.deallocate(node_costs, n);
-        link_alloc.deallocate(link_preds, m);
-#ifdef MLC_DEQUE
-        int_alloc.deallocate(next_nodes, n);
-#else
-        bool_alloc.deallocate(marked, n);
-#endif
-    }
+    /**
+     * @brief Destructor for SPNetwork
+     *
+     * @note exit code -1073740940 will be generated on Windows if simply using delete[] to
+     *       deallocate memory for link_costs, node_costs, link_preds, next_nodes, and marked.
+     */
+    ~SPNetwork() = default;
 
     size_type get_last_thru_node_no() const override
     {
