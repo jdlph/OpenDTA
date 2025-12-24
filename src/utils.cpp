@@ -760,6 +760,17 @@ void NetworkHandle::read_links()
         try
         {
             len = std::stod(line["length"]);
+            if (len < 0)
+            {
+                std::cout << "Negative Length for Link " << link_id << ". Record Discarded.\n";
+                continue;
+            }
+            else if (len == 0)
+            {
+                // std::cout << "Zero Length for Link " << link_id << ". Setting to Minimum Length.\n";
+                // set a minimum length as it is a potential connector
+                len = MIN_LINK_LENGTH;
+            }
         }
         catch(const miocsv::NoRecord& nr)
         {

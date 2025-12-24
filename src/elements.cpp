@@ -273,12 +273,13 @@ void SPNetwork::single_source_shortest_path(size_type src_node_no)
 {
     node_costs[src_node_no] = 0;
     next_nodes[src_node_no] = past_node;
+    size_type last_thru_node_no = get_last_thru_node_no();
 
     // use int intentionally
     for (int cur_node = src_node_no, deq_head = null_node, deq_tail = null_node;;)
     {
         // no centroid traversing
-        if (cur_node < get_last_thru_node_no() || cur_node == src_node_no)
+        if (cur_node < last_thru_node_no || cur_node == src_node_no)
         {
             for (const auto link : get_outgoing_links(cur_node))
             {
@@ -339,6 +340,7 @@ void SPNetwork::single_source_shortest_path_dijkstra(size_type src_node_no)
 {
     node_costs[src_node_no] = 0;
     min_heap.emplace(src_node_no, 0);
+    size_type last_thru_node_no = get_last_thru_node_no();
 
     do
     {
@@ -376,7 +378,7 @@ void SPNetwork::single_source_shortest_path_dijkstra(size_type src_node_no)
         marked[cur_node] = true;
 
         // no centroid traversing
-        if (cur_node < get_last_thru_node_no() || cur_node == src_node_no)
+        if (cur_node < last_thru_node_no || cur_node == src_node_no)
         {
             for (const auto link : get_outgoing_links(cur_node))
             {
