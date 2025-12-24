@@ -3,13 +3,47 @@
  * @author jdlph (jdlph@hotmail.com)
  * @brief A suite of lightening-fast CSV parsers and writer built upon the C++ std facilities
  *
- * @copyright Copyright (c) 2022 - 2023 Peiheng Li, Ph.D.
+ * @copyright Copyright (c) 2022 - 2024 Peiheng Li, Ph.D.
  */
 
 #ifndef GUARD_STDCSV_H
 #define GUARD_STDCSV_H
 
+/**
+ * @brief control the time bound of parsers
+ *
+ * @details defining O3N_TIME_BOUND will invoke an O(3N) parsing function (i.e., Reader::split3()).
+ *          otherwise, an O(5N) implementation (i.e., Reader::split2()) will be in place.
+ *
+ * @remark  it does not apply to MIOReader and MIODictReader as they only have one parsing function,
+ *          which is MIOReader::parse() bounded by O(3N).
+ */
 #define O3N_TIME_BOUND
+
+/**
+ * @brief check invalid csv format and print out warnings
+ *
+ * @details defining FORMAT_CHECKER will make the parsing function check the csv format and invoke
+ *          warnings. otherwise, a row is parsed as is. no warnings will be printed.
+ *
+ * @remark disabling FORMAT_CHECKER will result in the same parsing behaviors as Python csv.reader().
+ */
+#define FORMAT_CHECKER
+
+/**
+ * @brief further control how to treat invalid fields of a row
+ *
+ * @details if it is defined along with FORMAT_CHECKER, the parsing function will only keep the
+ *          valid fields and discard any invalid fields. A warning, "Invalid fields are discarded!",
+ *          will be printed. otherwise, a row is parsed as is without the above warning.
+ *
+ * @remark it only works when both O3N_TIME_BOUND and FORMAT_CHECKER are defined.
+ *         it does not apply to an O(5N) parsing function.
+ *
+ * @remark it might be deprecated in the future as it introduces complexity and inconsistency among
+ *         parsing functions.
+ */
+// #define CUT_BAD_FIELDS
 
 #include <algorithm>
 #include <fstream>
@@ -142,7 +176,7 @@ public:
 
     std::string& operator[](size_type i)
     {
-        if (i < 0 || i >= records.size())
+        if (i >= records.size())
             throw NoRecord{i};
 
         return records[i];
@@ -150,7 +184,7 @@ public:
 
     const std::string& operator[](size_type i) const
     {
-        if (i < 0 || i >= records.size())
+        if (i >= records.size())
             throw NoRecord{i};
 
         return records[i];
@@ -335,6 +369,16 @@ protected:
     const char CR = '\r';
     const char LF = '\n';
 
+    /**
+     * @deprecated
+     *
+     * @note promote direct warning message (since 12/01/24) (rather than throwing, catching, and
+     *       printing out the exception message) simplies the implementation and improves the
+     *       performance.
+     *
+     *       see Reader::split(), Reader::split2(), Reader::split3(), and MIOReader::parse() for
+     *       details.
+     */
     struct InvalidRow : public std::runtime_error {
         // do we need it?
         InvalidRow() = delete;
@@ -491,28 +535,15 @@ protected:
 #ifdef O3N_TIME_BOUND
         if (it == it_end)
             throw IterationEnd{};
+
+        row = split3();
 #else
         std::string s;
         if (!std::getline(ist, s))
             throw IterationEnd{};
-#endif
 
-        try
-        {
-#ifdef O3N_TIME_BOUND
-            row = split3();
-#else
-            row = split2(s);
+        row = split2(s);
 #endif
-        }
-        catch (const InvalidRow& e)
-        {
-            std::cerr << e.what() << '\n';
-            // this is necessary. otherwise, DictReader::iterate() will be called
-            // if DictReader is being used.
-            Reader::iterate();
-        }
-
         ++row_num;
     }
 
@@ -829,8 +860,14 @@ Row Reader::split(const std::string& s) const
             {
                 s1 += std::string(b, i + 1);
                 b = i + 1;
-                if (*b != quote && *b != delim && b != e)
-                    throw InvalidRow{row_num, s1};
+#ifdef FORMAT_CHECKER
+                if (*b != quote && *b != delim && *b != CR && b != e)
+                {
+                    std::cerr << "CAUTION: Invalid Row at line " << row_num + 1
+                              << "! Value is not allowed after quoted field: "
+                              << s1 << ".\n";
+                }
+#endif
             }
         }
         else if (*i == delim && !quoted)
@@ -880,10 +917,14 @@ Row Reader::split2(const C& c) const
         {
             sr.extend(++i);
             quoted ^= true;
-            if (!quoted && *i != quote && *i != delim && i != e)
+#ifdef FORMAT_CHECKER
+            if (!quoted && *i != quote && *i != delim && *it != CR && i != e)
             {
-                throw InvalidRow{row_num, sr.to_string()};
+                std::cerr << "CAUTION: Invalid Row at line " << row_num + 1
+                          << "! Value is not allowed after quoted field: "
+                          << sr.to_string() << ".\n";
             }
+#endif
         }
         else if (*i == delim && !quoted)
         {
@@ -919,11 +960,19 @@ Row Reader::split3()
         {
             s.push_back(*it++);
             quoted ^= true;
-            if (!quoted && *it != quote && *it != delim && *it != LF)
+#ifdef FORMAT_CHECKER
+            if (!quoted && *it != quote && *it != delim && *it != CR && *it != LF)
             {
-                ++it = std::find(it, it_end, LF);
-                throw Reader::InvalidRow{row_num, s};
+                std::cerr << "CAUTION: Invalid Row at line " << row_num + 1
+                          << "! Value is not allowed after quoted field: "
+                          << s << ".\n";
+#ifdef CUT_BAD_FIELDS
+                std::cerr << "\t Invalid fields are discarded!\n";
+                // "it" may have reached EOF
+                it = std::find(it, it_end, LF);
+#endif  // CUT_BAD_FIELDS
             }
+#endif  // FORMAT_CHECKER
         }
         else if (*it == delim && !quoted)
         {
