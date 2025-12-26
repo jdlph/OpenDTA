@@ -1,5 +1,9 @@
 ---
 # settings for OpenDTA
+network:
+  length_unit: mile
+  speed_unit: mph
+
 user_equilibrium:
   load_columns: false
   column_gen_num: 20

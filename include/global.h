@@ -41,6 +41,10 @@ constexpr double EPSILON = 0.00001;
 constexpr double MIN_COL_VOL = 0.1;
 constexpr double MIN_LINK_LENGTH = 0.001;
 
+// unit conversion factors
+constexpr double MILE_TO_METER = 1609.34;
+constexpr double MPH_TO_KMPH = 1.60934;
+
 const std::string ALL_MODES {"all"};
 const std::string AT_DEFAULT_NAME {"passenger"};
 const std::string AT_LEGACY_NAME {"auto"};

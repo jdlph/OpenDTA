@@ -759,7 +759,7 @@ void NetworkHandle::read_links()
         double len;
         try
         {
-            len = std::stod(line["length"]);
+            len = std::stod(line["length"]) / this->len_unit_conversion_factor;
             if (len < 0)
             {
                 std::cout << "Negative Length for Link " << link_id << ". Record Discarded.\n";
@@ -803,10 +803,10 @@ void NetworkHandle::read_links()
         //     // do nothing
         // }
 
-        double ffs = 60;
+        double ffs = 60 / this->spd_unit_conversion_factor;
         try
         {
-            ffs = std::stoi(line["free_speed"]);
+            ffs = std::stoi(line["free_speed"]) / this->spd_unit_conversion_factor;
         }
         catch(const std::exception& e)
         {
@@ -920,6 +920,59 @@ void NetworkHandle::read_network()
 void NetworkHandle::read_settings_yml(const std::string& file_path)
 {
     YAML::Node settings = YAML::LoadFile(file_path);
+
+    // set up network units
+    try
+    {
+        const YAML::Node& network = settings["network"];
+
+        try
+        {
+            auto length_unit = network["length_unit"].as<std::string>();
+            this->to_lower(length_unit);
+
+            if (length_unit == "meter"s || length_unit == "meters"s || length_unit == "m"s)
+                this->len_unit_conversion_factor = MILE_TO_METER;
+            else if (length_unit == "kilometer"s || length_unit == "kilometers"s || length_unit == "km"s)
+                this->len_unit_conversion_factor = MPH_TO_KMPH;
+            else if (length_unit == "mile"s || length_unit == "miles"s || length_unit == "mi"s)
+                this->len_unit_conversion_factor = 1.0;
+            else
+            {
+                std::cout << "unrecognized length unit " << length_unit
+                          << " in settings.yml, use default mile\n";
+            }
+        }
+        catch(const std::exception& e)
+        {
+            // do nothing and use default length unit: mile
+        }
+
+        try
+        {
+            auto speed_unit = network["speed_unit"].as<std::string>();
+            this->to_lower(speed_unit);
+
+            if (speed_unit == "km/h"s || speed_unit == "kmph"s)
+                this->spd_unit_conversion_factor = MPH_TO_KMPH;
+            else if (speed_unit == "mph"s)
+                this->spd_unit_conversion_factor = 1.0;
+            else
+            {
+                std::cout << "unrecognized speed unit " << speed_unit
+                          << " in settings.yml, use default mph\n";
+            }
+        }
+        catch (const std::exception& e)
+        {
+            // do nothing and use default speed unit: km/h
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // do nothing
+        // use default length unit: mile, speed unit: mph
+    }
 
     // set up ue
     try

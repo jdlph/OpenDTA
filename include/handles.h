@@ -270,6 +270,10 @@ private:
     unsigned short thread_nums = 1;
     unsigned short max_threads = std::numeric_limits<unsigned short>::max();
 
+    // network settings
+    double len_unit_conversion_factor = 1.0;
+    double spd_unit_conversion_factor = 1.0;
+
     // user equilibrium
     bool m_uses_existing_cols = false;
     unsigned short column_gen_num = 20;
