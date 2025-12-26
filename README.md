@@ -14,7 +14,7 @@ Extensive efforts have been or will be in place to ensure its appearance and per
 3. Use CMake to define the build process across platforms.
 
 #### Modern Configuration and Data Interchange
-1. Ditch the legacy [settings.csv](https://github.com/jdlph/Path4GMNS/blob/master/tests/settings.csv) and use Yaml for [configuration](https://github.com/jdlph/TransOMS/blob/dev/data/Chicago_Sketch/settings.yml).
+1. Ditch the legacy [settings.csv](https://github.com/jdlph/Path4GMNS/blob/master/tests/settings.csv) and use Yaml for [configuration](https://github.com/jdlph/OpenDTA/blob/dev/data/Chicago_Sketch/settings.yml).
 2. Introduce [JSON](https://json.org/example.html) as additional format to CSV for data interchange.
 
 ### Performance
@@ -89,7 +89,7 @@ Coming soon!
 
 ## Build
 
-TransOMS is built on [C++17](https://en.cppreference.com/w/cpp/17) with [yaml-cpp](https://github.com/jbeder/yaml-cpp) parsing configuration file and [OpenMP](https://www.openmp.org/about/openmp-faq/#WhatIs) managing parallelization.
+OpenDTA is built on [C++17](https://en.cppreference.com/w/cpp/17) with [yaml-cpp](https://github.com/jbeder/yaml-cpp) parsing configuration file and [OpenMP](https://www.openmp.org/about/openmp-faq/#WhatIs) managing parallelization.
 > [!IMPORTANT]
 > yaml-cpp is precompiled as a static library and embedded in [lib](lib/). Make sure you use **Clang** as the complier for **macOS**. Using g++ will lead to **compatibility issue** with yaml-cpp, which is built using Clang.
 

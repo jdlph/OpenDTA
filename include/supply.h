@@ -1162,6 +1162,7 @@ public:
     SPNetwork(unsigned short no_, PhyNetwork& pn_, ColumnPool& cp_, const DemandPeriod* dp_, const AgentType* at_)
         : no {no_}, pn {&pn_}, cp {&cp_}, dp {dp_}, at {at_}
     {
+        last_thru_node_no = pn->get_last_thru_node_no();
     }
 
     SPNetwork(const SPNetwork&) = delete;
@@ -1178,9 +1179,16 @@ public:
      */
     ~SPNetwork() = default;
 
+    /**
+     * @brief Get the last through node number
+     *
+     * @return size_type
+     *
+     * @note useless as last_thru_node_no can be directly perceived by the two shortest path algorithms
+     */
     size_type get_last_thru_node_no() const override
     {
-        return pn->get_last_thru_node_no();
+        return last_thru_node_no;
     }
 
     size_type get_link_num() const override
@@ -1272,6 +1280,7 @@ private:
 
 private:
     unsigned short no;
+    size_type last_thru_node_no;
 
     // NetworkHandle is responsible to clean them up
     const AgentType* at;
