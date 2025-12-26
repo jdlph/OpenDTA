@@ -803,15 +803,17 @@ void NetworkHandle::read_links()
         //     // do nothing
         // }
 
-        double ffs = 60 / this->spd_unit_conversion_factor;
+        double ffs = 60;
         try
         {
-            ffs = std::stoi(line["free_speed"]) / this->spd_unit_conversion_factor;
+            ffs = std::stoi(line["free_speed"]);
         }
         catch(const std::exception& e)
         {
             // do nothing
         }
+        // unit conversion
+        ffs /= this->spd_unit_conversion_factor;
 
         double cap = 1999;
         try

@@ -6,6 +6,7 @@
  * @copyright Copyright (c) 2023 - 2025 Peiheng Li, Ph.D. and Xuesong (Simon) Zhou, Ph.D.
  */
 
+#include <global.h>
 #include <handles.h>
 
 #include <iostream>

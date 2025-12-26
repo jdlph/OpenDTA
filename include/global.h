@@ -97,12 +97,12 @@ public:
 
     void start()
     {
-        st = ch::high_resolution_clock::now();
+        st = ch::steady_clock::now();
     }
 
     void stop()
     {
-        et = ch::high_resolution_clock::now();
+        et = ch::steady_clock::now();
     }
 
     void broadcast(std::string_view msg)
